@@ -48,6 +48,14 @@ BaiduSpider是一个爬取百度搜索结果的Python爬虫，目前支持百度
 <br />
 
 <h2 align="center">
+    ⚠️⚠️⚠️
+</h2>
+
+这是一个`dev`分支，意味着这里面的代码仍处于开发阶段，请谨慎使用。
+
+<br />
+
+<h2 align="center">
     免责声明
 </h2>
 

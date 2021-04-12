@@ -16,6 +16,7 @@ from bs4 import BeautifulSoup
 from baiduspider._spider import BaseSpider
 from baiduspider.errors import ParseError, UnknownError
 from baiduspider.parser import Parser
+from baiduspider.models.web import WebResult
 
 __all__ = ["BaiduSpider"]
 
@@ -65,7 +66,7 @@ class BaiduSpider(BaseSpider):
 
     def search_web(
         self, query: str, pn: int = 1, exclude: list = [], time: tuple = None
-    ) -> dict:
+    ) -> WebResult:
         """百度网页搜索.
 
         - 简单搜索：
@@ -282,7 +283,8 @@ class BaiduSpider(BaseSpider):
             error = err
         finally:
             self._handle_error(error, "BaiduSpider", "parse-web")
-        return {"results": results["results"], "total": results["pages"]}
+        # return {"results": results["results"], "total": results["pages"]}
+        return WebResult._build_instance(plain=results["results"])
 
     def search_pic(self, query: str, pn: int = 1) -> dict:
         """百度图片搜索.
