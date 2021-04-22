@@ -262,8 +262,8 @@ class BaiduSpider(BaseSpider):
             elif time == "year":
                 from_ += datetime.timedelta(days=-365)
         elif type(time) == tuple or type(time) == list:
-            to = time[0]
-            from_ = time[1]
+            from_ = time[0]
+            to = time[1]
         else:
             to = from_ = None
         if type(to) == datetime.datetime and type(from_) == datetime.datetime:

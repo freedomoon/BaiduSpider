@@ -1,113 +1,148 @@
+<!--
+*** Thanks for checking out the Best-README-Template. If you have a suggestion
+*** that would make this better, please fork the repo and create a pull request
+*** or simply open an issue with the tag "enhancement".
+*** Thanks again! Now go create something AMAZING! :D
+-->
+
+
+
+<!-- PROJECT SHIELDS -->
+<!--
+*** I'm using markdown "reference style" links for readability.
+*** Reference links are enclosed in brackets [ ] instead of parentheses ( ).
+*** See the bottom of this document for the declaration of the reference variables
+*** for contributors-url, forks-url, etc. This is an optional, concise syntax you may use.
+*** https://www.markdownguide.org/basic-syntax/#reference-style-links
+-->
+[![Contributors][contributors-shield]][contributors-url]
+[![Forks][forks-shield]][forks-url]
+[![Stargazers][stars-shield]][stars-url]
+[![Issues][issues-shield]][issues-url]
+[![MIT License][license-shield]][license-url]
+
+
+
+<!-- PROJECT LOGO -->
+<br />
 <p align="center">
-    <img width="40%" src="https://baiduspider.github.io/assets/favicon.png" alt="BaiduSpider" />
+  <a href="https://github.com/othneildrew/Best-README-Template">
+    <img src="https://baiduspider.github.io/assets/favicon.png" alt="Logo" width="80" height="80">
+  </a>
+
+  <h3 align="center">BaiduSpider</h3>
+
+  <p align="center">
+    一个爬取百度的利器
     <br />
-    <h2 align="center">
-        BaiduSpider
-    </h2>
+    <a href="https://baiduspider.github.io/"><strong>快速上手 »</strong></a>
     <br />
-    <p align="center">
-        <i>
-            BaiduSpider，一个爬取百度的利器
-        </i>
-    </p>
+    <br />
+    <a href="https://baiduspider.github.io/usage/get-started/">查看示例</a>
+    ·
+    <a href="https://github.com/BaiduSpider/BaiduSpider/issues">报告问题</a>
+    ·
+    <a href="https://github.com/BaiduSpider/BaiduSpider/issues">请求需求</a>
+  </p>
 </p>
 
-<br />
 
-<p align="center">
-    <b>
-        简体中文 | <a href="https://github.com/BaiduSpider/BaiduSpider/blob/master/README-en.md">English</a>
-    </b>
-</p>
 
-<p align="center">
-    <a href="https://www.python.org/">
-        <img src="https://img.shields.io/badge/Made%20with-Python-1f425f.svg" alt="made-with-python"/>
-    </a>
-    <a href="https://github.com/BaiduSpider/BaiduSpider/blob/master/LICENSE">
-        <img alt="GitHub" src="https://img.shields.io/github/license/BaiduSpider/BaiduSpider">
-    </a>
-    <a href="https://github.com/BaiduSpider/BaiduSpider/stargazers">
-        <img alt="GitHub Repo stars" src="https://img.shields.io/github/stars/BaiduSpider/BaiduSpider">
-    </a>
-    <a href="https://github.com/BaiduSpider/BaiduSpider/network/members">
-        <img alt="GitHub forks" src="https://img.shields.io/github/forks/BaiduSpider/BaiduSpider">
-    </a>
-    <a href="https://pypi.org/project/BaiduSpider/">
-        <img alt="PyPI version" src="https://img.shields.io/pypi/v/BaiduSpider">
-    </a>
-    <a href="https://pepy.tech/project/baiduspider">
-        <img alt="downloads" src="https://static.pepy.tech/personalized-badge/baiduspider?period=month&units=international_system&left_color=grey&right_color=brightgreen&left_text=downloads/month">
-    </a>
-</p>
+<!-- TABLE OF CONTENTS -->
+<details open="open">
+  <summary>目录</summary>
+  <ol>
+    <li>
+      <a href="#关于本项目">关于本项目</a>
+      <ul>
+        <li><a href="#制作依赖">制作依赖</a></li>
+      </ul>
+    </li>
+    <li>
+      <a href="#起步">起步</a>
+      <ul>
+        <li><a href="#预先条件">预先条件</a></li>
+        <li><a href="#安装">安装</a></li>
+      </ul>
+    </li>
+    <li><a href="#简单使用">简单使用</a></li>
+    <li><a href="#项目路线图">项目路线图</a></li>
+    <li><a href="#共同维护">共同维护</a></li>
+    <li><a href="#开源协议">开源协议</a></li>
+    <li><a href="#联系方式">联系方式</a></li>
+    <li><a href="#致谢">致谢</a></li>
+  </ol>
+</details>
 
-<h1></h1>
 
-BaiduSpider是一个爬取百度搜索结果的Python爬虫，目前支持百度网页搜索，百度图片搜索，百度知道搜索，百度视频搜索，百度资讯搜索，百度文库搜索，百度经验搜索和百度百科搜索。
 
-<br />
+<!-- ABOUT THE PROJECT -->
+## 关于本项目
 
-<h2 align="center">
-    ⚠️⚠️⚠️
-</h2>
+[![项目截图][product-screenshot]](https://example.com)
 
-这是一个`dev`分支，意味着这里面的代码仍处于开发阶段，请谨慎使用。
+搜索引擎是一个十分强大的工具，如果能让其他工具集成搜索引擎的众多强大功能，那么必将变得更加强大。但是，目前我没有找到一个可以精准提取搜索引擎搜索结果的开源爬虫。于是，我便编写了这个爬取百度搜索引擎的项目：BaiduSpider。
 
-<br />
+BaiduSpider的独特功能:
+* 节省提取数据的时间，对于类似深度学习项目的数据模型建立与训练起到了良好的帮助。
 
-<h2 align="center">
-    免责声明
-</h2>
+* 精准提取数据，并删除广告。
 
-<br />
+* 搜索结果大而全，支持多种搜索类型，支持多种返回类型。
 
-此项目仅作为学习用途，不可商用或爬取百度大量数据。此外，本项目已经更新为`GPL-V3`版权协议，意味着涉及（使用）此项目的任何其它项目必须开源且注明出处。特此说明，违者后果自负。
+当然，没有一个项目是完美的。任何一个项目的发展都需要社区的帮助。你可以通过发布一个Issue或提交一个PR来帮助BaiduSpider进步！:smile:
 
-<br />
+一些比较有帮助的文档或工具我将在最后的致谢部分中列出。
 
-<h2 align="center">
-    安装
-</h2>
+### 制作依赖
 
-<br />
+一些BaiduSpider使用的主要开源依赖包。
 
-BaiduSpider现已发布PyPI包，可以使用`pip`安装：
+* [BeautifulSoup 4](https://www.crummy.com/software/BeautifulSoup/)
+* [requests](https://docs.python-requests.org/zh_CN/latest/)
 
-```bash
+
+
+<!-- GETTING STARTED -->
+## 起步
+
+以安装BaiduSpider，请按照以下几个步骤操作。
+
+### 预先条件
+
+在安装BaiduSpider之前，请确保你安装了`Python3.6+`：
+
+```sh
+$ python --version
+```
+
+若版本小于`3.6.0`，请到[Python官网](https://www.python.org/downloads/)下载并安装Python。
+
+### 安装
+
+#### 使用`pip`安装
+
+请在命令行中输入下列指令：
+
+```sh
 $ pip install baiduspider
 ```
 
-或者从GitHub直接clone：
+#### 从GitHub手动安装
 
-```bash
-$ git clone https://github.com/BaiduSpider/BaiduSpider.git
+```sh
+$ git clone git@github.com:BaiduSpider/BaiduSpider.git
 
 # ...
 
 $ python setup.py install
 ```
 
-<br />
 
-<h3 align="center">
-    提示
-</h3>
+<!-- USAGE EXAMPLES -->
+## 简单使用
 
-<p align="center">
-    <b>
-        BaiduSpider目前仅支持Python 3.6+，暂不支持Python 2.x
-    </b>
-</p>
-
-<br />
-
-<h2 align="center">
-    快速上手
-</h2>
-
-<br />
-
-BaiduSpider提供简易的，人性化的API，可通过实例化`BaiduSpider`对象后调用。例如，我想要使用网页搜索函数查询有关`Python`的信息：
+你可以使用BaiduSpider通过短短的几行代码来获取百度的网页搜索结果：
 
 ```python
 # 导入BaiduSpider
@@ -121,157 +156,70 @@ spider = BaiduSpider()
 pprint(spider.search_web(query='Python'))
 ```
 
-获得的搜索结果将类似下面的这个Python字典结果：
+_更多样例和配置，请参照[文档](https://baiduspider.github.io)_
 
-```python
-{'results': [{'result': 100000000, 'type': 'total'},
-             {'results': ['0基础学python有多难',
-                          'python自学行吗',
-                          '学python要多久',
-                          'python手机版',
-                          'python有什么用',
-                          '财务有必要学python吗',
-                          'python为什么叫爬虫',
-                          'python处理excel的优势',
-                          'python自学免费教程'],
-              'type': 'related'},
-             {'result': {'cover': None,
-                         'cover-type': None,
-                         'des': 'Python是一种跨平台的计算机程序设计语言。 '
-                                '是一个高层次的结合了解释性、编译性、互动性和面向对象的脚本语言。最初被设计用于编写自动化脚本(shell)，随着版本的不断更新和语言新功能的添加，越多被用于独立的、大型项目的开发。',
-                         'title': 'Python(计算机程序设计语言) - 百度百科',
-                         'url': 'http://www.baidu.com/link?url=2z_Q_urbKikP4py4Y9tlMImyT090fjjaKi1gi4Z6bjvk1lU8MqYHewJTumd9YEpC5Jusis_8nqlTKsJgEMcRUa'},
-              'type': 'baike'},
-             {'des': 'The official home of the Python Programming Language... '
-                     '# Python 3: Simple output (with Unicode) >>> '
-                     'print("Hello, I\'m Python!") Hello, I\'m Python!',
-              'origin': 'www.python.org/',
-              'time': None,
-              'title': 'Welcome to Python.org',
-              'type': 'result',
-              'url': 'http://www.baidu.com/link?url=NC7GXkMtnZ9t8csmbawkvfp2QbDaaMHleael-qkCOtlSy_kfPsT8ARljUiIVOH2L'},
-             {'des': 'The official home of the Python Programming Language',
-              'origin': 'www.python.org/getit',
-              'time': None,
-              'title': 'Download Python | Python.org',
-              'type': 'result',
-              'url': 'http://www.baidu.com/link?url=AKBkNZv2L7600dOvqeylKK0fSRJJboDgjf7xGPuZfx2giBnXAiukP5ch7Tb619zC'},
-             {'des': 'Python(英国发音:/ˈpaɪθən/ 美国发音:/ˈpaɪθɑːn/), '
-                     '是一种面向对象的解释型计算机程序设计语言,由荷兰人Guido van Rossum于1989年发明,第...',
-              'origin': '知乎',
-              'time': None,
-              'title': 'Python - 知乎',
-              'type': 'result',
-              'url': 'http://www.baidu.com/link?url=xxKNKxpUHwEvoPt7OlqXceI0jTqTgvkJr0cncYDUPVNpYB397k-mbLlMOrw4IhNa'},
-             {'des': 'Python 基础教程 Python 是一种解释型、面向对象、动态数据类型的高级程序设计语言。 Python 由 '
-                     'Guido van Rossum 于 1989 年底发明,第一个公开发行版发行于 1991...',
-              'origin': 'www.runoob.com/python/python-t...',
-              'time': '2020年1月1日',
-              'title': 'Python 基础教程 | 菜鸟教程',
-              'type': 'result',
-              'url': 'http://www.baidu.com/link?url=ShmleIIBtIEfujCO1Wqh3PrOab_VrP87gN9GkEDGwQSj9OJ27Hst5NRomZtDRaxI7-WWSGLJ0-olY7Gt5merVK'},
-             {'des': '在Python 中,* 和 ** 具有语法多义性,具体来说是有三类用法。1. 算数运算* 代表乘法** '
-                     '代表乘方>>> 2 * 510>>> 2 ** 5322...',
-              'origin': 'CSDN技术社区',
-              'time': '2018年6月5日',
-              'title': 'Python3 * 和 ** 运算符_极客点儿-CSDN博客',
-              'type': 'result',
-              'url': 'http://www.baidu.com/link?url=Wo6dq8qZ24BrXjb6ZO5Ft20HEUmtEvGn7zTArPFe6IGnYYID3jjhQK_iwtP2G_rawgQLa52_68YRCVWzYjfPyptYEJmoGu-kDlTsmNoJ26S'},
-             {'des': '首先上一首 Python 之禅:我从 2015 年 3 月第一次接触 Python 这门语言(之前一直写 '
-                     'PHP),就对其简洁…',
-              'origin': '知乎',
-              'time': '2019年3月28日',
-              'title': '你都用 Python 来做什么? - 知乎',
-              'type': 'result',
-              'url': 'http://www.baidu.com/link?url=9Yve5ybsv1wP2WlxkOqO0z7wa_DaY__D1bTMLOaxT_UAqayv9RVWNHOjo68Hj1GycG5KSNutW6ofYdO4pYsjrTBz3Pe4hl-yQRxMtOfiWES'},
-             {'des': 'Python是由创始人贵铎·范·罗萨姆(Guido van '
-                     'Rossum)在阿姆斯特丹于1989年圣诞节期间,为了打发圣诞节的无趣,开发的一个新的解释型脚本语言。',
-              'origin': 'www.yunweipai.com/python',
-              'time': '2019年4月25日',
-              'title': 'Python教程 - 运维派',
-              'type': 'result',
-              'url': 'http://www.baidu.com/link?url=px_zi74_EXc23TEOILqPGQfW49CRQv448R7MXLXGQiV-HQNiuxW8sYGRhasJSOVp'},
-             {'des': '这套Python基础教程通俗易懂,深入浅出,旨在帮助大家快速入门。这套Python教程虽然学习门槛低,但是知识体系很丰富,并且包含了大量实例,让大家学以致用。',
-              'origin': 'c.biancheng.net/python',
-              'time': None,
-              'title': 'Python基础教程,Python入门教程(非常详细)_C语言中文网',
-              'type': 'result',
-              'url': 'http://www.baidu.com/link?url=etpIrqd8bVpZzDq54FotETIfGChVtHeVAjLjdVHgdFSyN-jvo421D01Tdjt7FsJ9'},
-             {'des': 'Python 100例 以下实例在Python2.7下测试通过: Python 练习实例1 Python '
-                     '练习实例2 Python 练习实例3 Python 练习实例4 Python 练习实例5 Python '
-                     '练习实例6 Python...',
-              'origin': 'www.runoob.com/python/python-1...',
-              'time': None,
-              'title': 'Python 100例 | 菜鸟教程',
-              'type': 'result',
-              'url': 'http://www.baidu.com/link?url=pMlhzHAsK3rai-RLPA0nY_s1nahEjH5nrkPw23lbXbCUWeV0moA3vvMfa0wTSSpJ0FUjizbPCEq0d_lIFiGiHK'}],
- 'total': 10}
-```
 
-更详细的新手教程可在[文档](https://baiduspider.github.io/usage/get-started/)中找到。
 
-<br />
+<!-- ROADMAP -->
+## 项目路线图
 
-<h2 align="center">
-    开发人员
-</h2>
+请参考[open issues](https://github.com/BaiduSpider/BaiduSpider/issues)以获取最新的项目规划以及已知问题。
 
-<br />
 
-<span style="margin-bottom: 64px">
-    <img src="https://i.loli.net/2021/02/22/RxnyipfumCDMAhY.png" alt="samzhangjy" style="border-radius: 100%" />
-</span>
-&nbsp;&nbsp;
-<span style="margin-top: -64px">
-    <a href="https://github.com/samzhangjy" style="text-decoration: none;">
-        <b>samzhangjy</b>
-    </a>,
-    现任OIer，业余Python Coder。BaiduSpider作者，主要代码贡献者。
-</span>
-<br /><br />
-<span style="margin-bottom: 64px">
-    <img src="https://i.loli.net/2021/02/22/LI1q9rUvVbFRmnw.png" alt="陈绍坤" style="border-radius: 100%" />
-</span>
-&nbsp;&nbsp;
-<span style="margin-top: -64px">
-    <a href="https://github.com/kunkunhub" style="text-decoration: none;">
-        <b>陈绍坤</b>
-    </a>,
-    Web开发者，编程爱好者，12岁，擅长Flask。BaiduSpider代码贡献者。
-</span>
 
-<br /><br />
+<!-- CONTRIBUTING -->
+## 共同维护
 
-<h2 align="center">
-    维护BaiduSpider
-</h2>
+项目贡献是开源项目的灵魂所在，也是整个开源社区学习、交流、获得灵感的地方。任何贡献都将**极力欢迎**。
 
-<br />
+1. Fork此项目
+2. 创建你的feature分支 (`git checkout -b NewFeatures`)
+3. 提交你的更改 (`git commit -m 'Add some AmazingFeature'`)
+4. 推送更改 (`git push origin username/BaiduSpider`)
+5. 提交一个PR
 
-如果你想要参与BaiduSpider的维护工作，我将十分感激！维护的方式多种多样，可以通过[提交新的issue](https://github.com/BaiduSpider/BaiduSpider/issues/new/choose)，可以为新手解答issue，甚至[提交一个PR](https://github.com/BaiduSpider/BaiduSpider/compare)！
 
-<br />
 
-<h2 align="center">
-    关于速度
-</h2>
+<!-- LICENSE -->
+## 开源协议
 
-<br />
+此项目的开源协议为`GPL-V3`，详情请参见`LICENSE`。
 
-本项目的执行速度很大情况下取决于你所在地区的网速。本项目的解析时间约为0.3 ~ 0.4秒，若将`exclude`设为`['all']`，即仅解析普通结果，解析时间约为0.2秒。如果你想要测试解析速度，可以将执行`BaiduSpider.parse_web`的时间记录下来。详细使用请见注释，由于是内部函数，将不会出现在文档中。
 
-<br />
 
-<h2 align="center">
-    特别致谢
-</h2>
+<!-- CONTACT -->
+## 联系方式
 
-<br />
+samzhangjy - [@samzhangjy](https://twitter.com/samzhangjy) - samzhang951@outlook.com
 
-- 感谢[requests](https://requests.readthedocs.io/en/master/)提供爬虫的HTTP获取网页的支持
+项目链接: [https://github.com/BaiduSpider/BaiduSpider](https://github.com/BaiduSpider/BaiduSpider)
 
-- 感谢[MkDocs](https://github.com/mkdocs/mkdocs)和[Material for MkDocs](squidfunk.github.io/mkdocs-material/)提供的精致的文档框架
 
-- 感谢[Vue](http://vuejs.org/)这个强大的前端框架，为BaiduSpider的[前端](https://baiduspider.now.sh)提供了强有力的支持
 
-- 感谢所有对BaiduSpider提交错误报告，解答issue，和提交PR的你们！
+<!-- ACKNOWLEDGEMENTS -->
+## 致谢
+* [BeautifulSoup 4](https://www.crummy.com/software/BeautifulSoup/)
+* [requests](https://docs.python-requests.org/zh_CN/latest/)
+* [Img Shields](https://shields.io)
+* [Gitmoji](https://gitmoji.dev/)
+* [Best-README-Template](https://github.com/othneildrew/Best-README-Template)
+* [Choose an Open Source License](https://choosealicense.com)
+* [GitHub Pages](https://pages.github.com)
+
+
+
+
+
+<!-- MARKDOWN LINKS & IMAGES -->
+<!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
+[contributors-shield]: https://img.shields.io/github/contributors/BaiduSpider/BaiduSpider?style=for-the-badge
+[contributors-url]: https://github.com/BaiduSpider/BaiduSpider/graphs/contributors
+[forks-shield]: https://img.shields.io/github/forks/BaiduSpider/BaiduSpider?style=for-the-badge
+[forks-url]: https://github.com/othneildrew/Best-README-Template/network/members
+[stars-shield]: https://img.shields.io/github/stars/BaiduSpider/BaiduSpider?style=for-the-badge
+[stars-url]: https://github.com/othneildrew/Best-README-Template/stargazers
+[issues-shield]: https://img.shields.io/github/issues/BaiduSpider/BaiduSpider?style=for-the-badge
+[issues-url]: https://github.com/othneildrew/Best-README-Template/issues
+[license-shield]: https://img.shields.io/github/license/BaiduSpider/BaiduSpider?style=for-the-badge
+[license-url]: https://github.com/othneildrew/Best-README-Template/blob/master/LICENSE.txt
+[product-screenshot]: https://i.loli.net/2021/04/22/V7gGrmTDlfR5U24.png
