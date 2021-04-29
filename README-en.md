@@ -90,7 +90,7 @@
 
 Search engine is a very powerful tool. However, if other tools could implant the most features of the search engine, then it will be even more powerful. But, I have not found any web spider to extract the search results accurately. So, with that goal in mind, I developed this project to crawl Baidu: BaiduSpider.
 
-Here's wht:
+Here's why:
 * Makes the time of extracting data less, which speeds up the development of projects like deep-learning.
 
 * Extract data accurately, without Ads.

@@ -2,6 +2,7 @@ from typing import Any
 from baiduspider.models import get_attr, convert_time
 from baiduspider.models.typings_web import *
 
+
 class WebNormal(WebNormal):
     """普通搜索结果模型
 
@@ -15,6 +16,7 @@ class WebNormal(WebNormal):
         time (datetime): 搜索结果发布时间
         plain (dict): 源搜索结果字典
     """
+
     def __init__(self) -> None:
         super().__init__()
         self.des = ""
@@ -28,12 +30,13 @@ class WebNormal(WebNormal):
     def _build_instance(plain: dict) -> WebNormal:
         __returns = WebNormal()
         __returns.plain = plain
-        __returns.des = get_attr(plain, 'des')
-        __returns.origin = get_attr(plain, 'origin')
-        __returns.title = get_attr(plain, 'title')
-        __returns.url = get_attr(plain, 'url')
-        __returns.time = convert_time(get_attr(plain, 'time'))
+        __returns.des = get_attr(plain, "des")
+        __returns.origin = get_attr(plain, "origin")
+        __returns.title = get_attr(plain, "title")
+        __returns.url = get_attr(plain, "url")
+        __returns.time = convert_time(get_attr(plain, "time"))
         return __returns
+
 
 class WebCalc(WebCalc):
     """计算搜索结果模型
@@ -45,6 +48,7 @@ class WebCalc(WebCalc):
         result (str): 计算结果，由于可能是`1e6`这样的形式，所以类型为`str`
         plain (dict): 源搜索结果字典
     """
+
     def __init__(self) -> None:
         super().__init__()
         self.process = ""
@@ -55,9 +59,10 @@ class WebCalc(WebCalc):
     def _build_instance(plain: dict) -> WebCalc:
         __returns = WebCalc()
         __returns.plain = plain
-        __returns.process = get_attr(plain, 'process')
-        __returns.result = int(get_attr(plain, 'result'))
+        __returns.process = get_attr(plain, "process")
+        __returns.result = int(get_attr(plain, "result"))
         return __returns
+
 
 class WebNews(WebNews):
     """资讯搜索结果模型
@@ -71,24 +76,26 @@ class WebNews(WebNews):
         des (str): 资讯简介
         plain (dict): 源搜索结果字典
     """
+
     def __init__(self) -> None:
         super().__init__()
-        self.author = ''
+        self.author = ""
         self.time = None
-        self.url = ''
-        self.des = ''
+        self.url = ""
+        self.des = ""
         self.plain = {}
 
     @staticmethod
     def _build_instance(plain: dict) -> WebNews:
         __returns = WebNews()
         __returns.plain = plain
-        __returns.author = get_attr(plain, 'author')
-        __returns.time = convert_time(get_attr(plain, 'time'))
-        __returns.title = get_attr(plain, 'title')
-        __returns.url = get_attr(plain, 'url')
-        __returns.des = get_attr(plain, 'des')
+        __returns.author = get_attr(plain, "author")
+        __returns.time = convert_time(get_attr(plain, "time"))
+        __returns.title = get_attr(plain, "title")
+        __returns.url = get_attr(plain, "url")
+        __returns.des = get_attr(plain, "des")
         return __returns
+
 
 class WebVideo(WebVideo):
     """视频搜索结果模型
@@ -103,25 +110,27 @@ class WebVideo(WebVideo):
         url (str): 视频链接
         plain (dict): 源搜索结果字典
     """
+
     def __init__(self) -> None:
         super().__init__()
-        self.cover = ''
-        self.origin = ''
-        self.length = ''
-        self.title = ''
-        self.url = ''
+        self.cover = ""
+        self.origin = ""
+        self.length = ""
+        self.title = ""
+        self.url = ""
         self.plain = {}
 
     @staticmethod
     def _build_instance(plain: dict) -> WebVideo:
         __returns = WebVideo()
         __returns.plain = plain
-        __returns.cover = get_attr(plain, 'cover')
-        __returns.origin = get_attr(plain, 'origin')
-        __returns.length = get_attr(plain, 'length')
-        __returns.title = get_attr(plain, 'title')
-        __returns.url = get_attr(plain, 'url')
+        __returns.cover = get_attr(plain, "cover")
+        __returns.origin = get_attr(plain, "origin")
+        __returns.length = get_attr(plain, "length")
+        __returns.title = get_attr(plain, "title")
+        __returns.url = get_attr(plain, "url")
         return __returns
+
 
 class WebBaike(WebBaike):
     """百科搜索结果模型
@@ -136,25 +145,27 @@ class WebBaike(WebBaike):
         url (str): 百科链接
         plain (dict): 源搜索结果字典
     """
+
     def __init__(self) -> None:
         super().__init__()
-        self.cover = ''
-        self.cover_type = ''
-        self.des = ''
-        self.title = ''
-        self.url = ''
+        self.cover = ""
+        self.cover_type = ""
+        self.des = ""
+        self.title = ""
+        self.url = ""
         self.plain = {}
 
     @staticmethod
     def _build_instance(plain: dict) -> WebBaike:
         __returns = WebBaike()
         __returns.plain = plain
-        __returns.cover = get_attr(plain, 'cover')
-        __returns.cover_type = get_attr(plain, 'cover-type')
-        __returns.des = get_attr(plain, 'des')
-        __returns.title = get_attr(plain, 'title')
-        __returns.url = get_attr(plain, 'url')
+        __returns.cover = get_attr(plain, "cover")
+        __returns.cover_type = get_attr(plain, "cover-type")
+        __returns.des = get_attr(plain, "des")
+        __returns.title = get_attr(plain, "title")
+        __returns.url = get_attr(plain, "url")
         return __returns
+
 
 class WebTiebaHot(WebTiebaHot):
     """贴吧热门搜索结果模型
@@ -168,23 +179,25 @@ class WebTiebaHot(WebTiebaHot):
         url (str): 帖子链接
         plain (dict): 源搜索结果字典
     """
+
     def __init__(self) -> None:
         super().__init__()
-        self.clicks = ''
-        self.replies = ''
-        self.title = ''
-        self.url = ''
+        self.clicks = ""
+        self.replies = ""
+        self.title = ""
+        self.url = ""
         self.plain = {}
-    
+
     @staticmethod
     def _build_instance(plain: dict) -> WebTiebaHot:
         __returns = WebTiebaHot()
         __returns.plain = plain
-        __returns.clicks = get_attr(plain, 'clicks')
-        __returns.replies = get_attr(plain, 'replies')
-        __returns.title = get_attr(plain, 'title')
-        __returns.url = get_attr(plain, 'url')
+        __returns.clicks = get_attr(plain, "clicks")
+        __returns.replies = get_attr(plain, "replies")
+        __returns.title = get_attr(plain, "title")
+        __returns.url = get_attr(plain, "url")
         return __returns
+
 
 class WebTieba(WebTieba):
     """贴吧搜索结果模型
@@ -201,31 +214,33 @@ class WebTieba(WebTieba):
         url (str): 贴吧链接
         plain (dict): 源搜索结果字典
     """
+
     def __init__(self) -> None:
         super().__init__()
-        self.cover = ''
-        self.des = ''
-        self.title = ''
-        self.followers = ''
-        self.total = ''
-        self.url = ''
+        self.cover = ""
+        self.des = ""
+        self.title = ""
+        self.followers = ""
+        self.total = ""
+        self.url = ""
         self.hot = []
         self.plain = {}
-    
+
     @staticmethod
     def _build_instance(plain: dict) -> WebTieba:
         __returns = WebTieba()
         __returns.plain = plain
-        __returns.cover = get_attr(plain, 'cover')
-        __returns.des = get_attr(plain, 'des')
-        __returns.title = get_attr(plain, 'title')
-        __returns.url = get_attr(plain, 'url')
-        __returns.followers = get_attr(plain, 'followers')
-        __returns.total = get_attr(plain, 'total')
-        __returns.url = get_attr(plain, 'url')
-        for i in get_attr(plain, 'hot'):
+        __returns.cover = get_attr(plain, "cover")
+        __returns.des = get_attr(plain, "des")
+        __returns.title = get_attr(plain, "title")
+        __returns.url = get_attr(plain, "url")
+        __returns.followers = get_attr(plain, "followers")
+        __returns.total = get_attr(plain, "total")
+        __returns.url = get_attr(plain, "url")
+        for i in get_attr(plain, "hot"):
             __returns.hot.append(WebTiebaHot._build_instance(i))
         return __returns
+
 
 class WebBlogBlogs(WebBlogBlogs):
     """博客详情搜索结果模型
@@ -240,12 +255,13 @@ class WebBlogBlogs(WebBlogBlogs):
         tags (List[str]): 博客标签
         plain (dict): 源搜索结果字典
     """
+
     def __init__(self) -> None:
         super().__init__()
-        self.title = ''
-        self.url = ''
-        self.des = ''
-        self.origin = ''
+        self.title = ""
+        self.url = ""
+        self.des = ""
+        self.origin = ""
         self.tags = []
         self.plain = {}
 
@@ -253,13 +269,14 @@ class WebBlogBlogs(WebBlogBlogs):
     def _build_instance(plain: dict) -> WebBlogBlogs:
         __returns = WebBlogBlogs()
         __returns.plain = plain
-        __returns.des = get_attr(plain, 'des')
-        __returns.origin = get_attr(plain, 'origin')
-        __returns.title = get_attr(plain, 'title')
-        __returns.url = get_attr(plain, 'url')
-        for i in get_attr(plain, 'tags'):
+        __returns.des = get_attr(plain, "des")
+        __returns.origin = get_attr(plain, "origin")
+        __returns.title = get_attr(plain, "title")
+        __returns.url = get_attr(plain, "url")
+        for i in get_attr(plain, "tags"):
             __returns.tags.append(i)
         return __returns
+
 
 class WebBlog(WebBlog):
     """博客搜索结果模型
@@ -272,21 +289,23 @@ class WebBlog(WebBlog):
         blogs (List[WebBlogBlogs]): 博客详情列表
         plain (dict): 源搜索结果字典
     """
+
     def __init__(self) -> None:
-        self.title = ''
-        self.url = ''
+        self.title = ""
+        self.url = ""
         self.blogs = []
         self.plain = {}
-    
+
     @staticmethod
     def _build_instance(plain: dict) -> WebBlog:
         __returns = WebBlog()
         __returns.plain = plain
-        __returns.title = get_attr(plain, 'title')
-        __returns.url = get_attr(plain, 'url')
-        for i in get_attr(plain, 'blogs'):
+        __returns.title = get_attr(plain, "title")
+        __returns.url = get_attr(plain, "url")
+        for i in get_attr(plain, "blogs"):
             __returns.blogs.append(WebBlogBlogs._build_instance(i))
         return __returns
+
 
 class WebGitee(WebGitee):
     """Gitee仓库搜索结果模型
@@ -305,33 +324,35 @@ class WebGitee(WebGitee):
         status (str): 仓库状态（码云指数）图片链接
         plain (dict): 源搜索结果字典
     """
+
     def __init__(self) -> None:
         super().__init__()
-        self.title = ''
-        self.des = ''
-        self.url = ''
+        self.title = ""
+        self.des = ""
+        self.url = ""
         self.star = 0
         self.fork = 0
         self.watch = 0
-        self.license = ''
-        self.lang = ''
-        self.status = ''
+        self.license = ""
+        self.lang = ""
+        self.status = ""
         self.plain = {}
-    
+
     @staticmethod
     def _build_instance(plain: dict) -> WebGitee:
         __returns = WebGitee()
         __returns.plain = plain
-        __returns.title = get_attr(plain, 'title')
-        __returns.url = get_attr(plain, 'url')
-        __returns.des = get_attr(plain, 'des')
-        __returns.star = get_attr(plain, 'star')
-        __returns.fork = get_attr(plain, 'fork')
-        __returns.watch = get_attr(plain, 'watch')
-        __returns.license = get_attr(plain, 'license')
-        __returns.lang = get_attr(plain, 'lang')
-        __returns.status = get_attr(plain, 'status')
+        __returns.title = get_attr(plain, "title")
+        __returns.url = get_attr(plain, "url")
+        __returns.des = get_attr(plain, "des")
+        __returns.star = get_attr(plain, "star")
+        __returns.fork = get_attr(plain, "fork")
+        __returns.watch = get_attr(plain, "watch")
+        __returns.license = get_attr(plain, "license")
+        __returns.lang = get_attr(plain, "lang")
+        __returns.status = get_attr(plain, "status")
         return __returns
+
 
 class WebResult(WebResult):
     def __init__(self) -> None:
@@ -353,30 +374,34 @@ class WebResult(WebResult):
         __returns = WebResult()
         __returns.plain = plain
         for p in plain:
-            if get_attr(p, 'type') == 'result':
+            if get_attr(p, "type") == "result":
                 __returns.normal.append(WebNormal._build_instance(p))
-            elif get_attr(p, 'type') == 'total':
-                __returns.total = get_attr(p, 'result')
-            elif get_attr(p, 'type') == 'related':
-                __returns.related = get_attr(p, 'results')
-            elif get_attr(p, 'type') == 'calc':
+            elif get_attr(p, "type") == "total":
+                __returns.total = get_attr(p, "result")
+            elif get_attr(p, "type") == "related":
+                __returns.related = get_attr(p, "results")
+            elif get_attr(p, "type") == "calc":
                 __returns.calc = WebCalc._build_instance(p)
-            elif get_attr(p, 'type') == 'news':
-                __returns.news = [WebNews._build_instance(i) for i in get_attr(p, 'results')]
-            elif get_attr(p, 'type') == 'video':
-                __returns.video = [WebVideo._build_instance(i) for i in get_attr(p, 'results')]
-            elif get_attr(p, 'type') == 'baike':
-                __returns.baike = WebBaike._build_instance(get_attr(p, 'result'))
-            elif get_attr(p, 'type') == 'tieba':
-                __returns.baike = WebTieba._build_instance(get_attr(p, 'result'))
-            elif get_attr(p, 'type') == 'blog':
-                __returns.blog = WebBlog._build_instance(get_attr(p, 'result'))
-            elif get_attr(p, 'type') == 'gitee':
-                __returns.gitee = WebGitee._build_instance(get_attr(p, 'result'))
+            elif get_attr(p, "type") == "news":
+                __returns.news = [
+                    WebNews._build_instance(i) for i in get_attr(p, "results")
+                ]
+            elif get_attr(p, "type") == "video":
+                __returns.video = [
+                    WebVideo._build_instance(i) for i in get_attr(p, "results")
+                ]
+            elif get_attr(p, "type") == "baike":
+                __returns.baike = WebBaike._build_instance(get_attr(p, "result"))
+            elif get_attr(p, "type") == "tieba":
+                __returns.baike = WebTieba._build_instance(get_attr(p, "result"))
+            elif get_attr(p, "type") == "blog":
+                __returns.blog = WebBlog._build_instance(get_attr(p, "result"))
+            elif get_attr(p, "type") == "gitee":
+                __returns.gitee = WebGitee._build_instance(get_attr(p, "result"))
         return __returns
-    
+
     def __getitem__(self, key) -> Any:
         return self.plain[key]
-    
+
     def __repr__(self) -> str:
-        return '<object WebResult>'
+        return "<object WebResult>"
