@@ -37,9 +37,9 @@
     <br />
     <span>简体中文</span>
     |
-    <a href="https://github.com/BaiduSpider/BaiduSpider/blob/master/README-zh-tw.md"><strong>繁體中文</strong></a>
+    <a href="https://github.com/BaiduSpider/BaiduSpider/blob/dev/README-zh-tw.md"><strong>繁體中文</strong></a>
     |
-    <a href="https://github.com/BaiduSpider/BaiduSpider/blob/master/README-en.md"><strong>English</strong></a>
+    <a href="https://github.com/BaiduSpider/BaiduSpider/blob/dev/README-en.md"><strong>English</strong></a>
     <br />
     <a href="https://baiduspider.github.io/"><strong>快速上手 »</strong></a>
     <br />
@@ -77,10 +77,15 @@
     <li><a href="#开源协议">开源协议</a></li>
     <li><a href="#联系方式">联系方式</a></li>
     <li><a href="#免责声明">免责声明</a></li>
+    <li><a href="#贡献者">贡献者</a></li>
     <li><a href="#致谢">致谢</a></li>
   </ol>
 </details>
 
+
+## 警告
+
+此分支为`dev`分支，也就是开发分支。此分支下的所有代码可能均没有通过（尚未编写的）单元测试。也就是说，所有代码或功能可能都不稳定，仅供参考。不建议在开源项目中使用此分支的BaiduSpider。
 
 
 <!-- ABOUT THE PROJECT -->
@@ -205,6 +210,13 @@ samzhangjy - [@samzhangjy](https://twitter.com/samzhangjy) - samzhang951@outlook
 ## 免责声明
 
 此项目仅作为学习用途，不可商用或爬取百度大量数据。此外，本项目使用`GPL-V3`版权协议，意味着涉及（使用）此项目的任何其它项目必须开源且注明出处，并且本项目作者将不承担任何法律风险。特此说明，违者后果自负。
+
+
+## 贡献者
+
+<a href="https://github.com/baiduspider/baiduspider/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=baiduspider/baiduspider" />
+</a>
 
 
 <!-- ACKNOWLEDGEMENTS -->

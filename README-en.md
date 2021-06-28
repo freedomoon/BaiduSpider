@@ -35,9 +35,9 @@
   <p align="center">
     A perfect tool for crawling Baidu
     <br />
-    <a href="https://github.com/BaiduSpider/BaiduSpider/blob/master/README.md"><strong>简体中文</strong></a>
+    <a href="https://github.com/BaiduSpider/BaiduSpider/blob/dev/README.md"><strong>简体中文</strong></a>
     |
-    <a href="https://github.com/BaiduSpider/BaiduSpider/blob/master/README-zh-tw.md"><strong>繁體中文</strong></a>
+    <a href="https://github.com/BaiduSpider/BaiduSpider/blob/dev/README-zh-tw.md"><strong>繁體中文</strong></a>
     |
     <span>English</span>
     <br />
@@ -77,10 +77,15 @@
     <li><a href="#License">License</a></li>
     <li><a href="#contact">Contact</a></li>
     <li><a href="#disclaimer">Disclaimer</a></li>
+    <li><a href="#contributors">Contributors</a></li>
     <li><a href="#acknowledgements">Acknowledgements</a></li>
   </ol>
 </details>
 
+
+## WARNING
+
+This is the `dev` branch, which is the development branch. All code under this branch may be not tested by the (not written yet) unit tests. Which means, all code or features may be unstable, it is for reference only. We do NOT recommend using this version of BaiduSpider in open source projects.
 
 
 <!-- ABOUT THE PROJECT -->
@@ -205,6 +210,13 @@ Project Link: [https://github.com/BaiduSpider/BaiduSpider](https://github.com/Ba
 ## Disclaimer
 
 This project can only be used for learning purposes and cannot be used in commercial projects or crawl a lot of data. Also, BaiduSpider is distributed under the `GPL-V3` license, meaning any project using BaiduSpider must be open-source and link to this project. The author of this project will not afford any legal risks. It is hereby stated that offenders are responsible for the consequences.
+
+
+## Contributors
+
+<a href="https://github.com/baiduspider/baiduspider/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=baiduspider/baiduspider" />
+</a>
 
 
 <!-- ACKNOWLEDGEMENTS -->

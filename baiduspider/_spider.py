@@ -1,6 +1,8 @@
 import re
+from typing import Union
 import requests
 import os
+from datetime import datetime, timedelta
 
 
 class BaseSpider(object):
@@ -22,7 +24,13 @@ class BaseSpider(object):
         Returns:
             str: 处理后的字符串
         """
-        return s.strip().replace("\xa0", "").replace("\u2002", "")
+        return (
+            s.strip()
+            .replace("\xa0", "")
+            .replace("\u2002", "")
+            .replace("\u3000", "")
+            .strip()
+        )
 
     def _remove_html(self, s: str) -> str:
         """从字符串中去除HTML标签
@@ -80,6 +88,46 @@ class BaseSpider(object):
             #     '请在https://github.com/BaiduSpider/BaiduSpider/issues/new?assignees=&labels=bug%2C+help+wanted&template=bug_report.md'
             #     '&title=%5BBUG%5D%20%E6%AD%A4%E5%A4%84%E5%A1%AB%E5%86%99%E4%BD%A0%E7%9A%84%E6%A0%87%E9%A2%98 提交一个新的issue。\033[31;m')
             return None
+
+    def _convert_time(self, t: str, as_list: bool = False) -> Union[datetime, bool]:
+        """转换有时间差的汉字表示的时间到`datetime.datetime`形式的时间
+
+        Args:
+            t (str): 要转换的字符串
+            as_list (bool): 是否以列表形式返回
+
+        Returns:
+            datetime: 转换后的`datetime.datetime`结果
+        """
+        if t is None:
+            return None
+        delta = int(re.findall("\d+", t)[0])
+        if "秒" in t:
+            s = datetime.now() - timedelta(seconds=delta)
+        elif "分钟" in t:
+            s = datetime.now() - timedelta(minutes=delta)
+
+        elif "小时" in t:
+            s = datetime.now() - timedelta(hours=delta)
+        elif "天" in t:
+            s = datetime.now() - timedelta(days=delta)
+        # elif '年' in t:
+        #     s = (datetime.now() - timedelta(days=365 * delta))
+        elif "年" in t and "月" in t and "日" in t:
+            s = datetime.strptime(t, "%Y年%m月%d日")
+        else:
+            s = datetime.now()
+        if not as_list:
+            return s
+        return [s.year, s.month, s.day, s.hour, s.minute, s.second]
+
+    def _reformat_big_num(self, t: str, r: str = "") -> int:
+        delta = 1
+        if "万" in t:
+            delta = 10000
+        elif "亿" in t:
+            delta = 100000000
+        return int(float(t.replace(r, "").replace("万", "").replace("亿", "")) * delta)
 
     def __repr__(self) -> str:  # pragma: no cover
         return "<Spider %s>" % self.spider_name

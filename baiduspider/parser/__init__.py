@@ -1,4 +1,5 @@
 import json
+from datetime import datetime, time
 from html import unescape
 
 from baiduspider._spider import BaseSpider
@@ -67,6 +68,11 @@ class Parser(BaseSpider):
         if "tieba" not in exclude:
             tieba = BeautifulSoup(content, "html.parser").find("div", srcid="10")
             tieba = self.webSubParser.parse_tieba_block(tieba)
+        if "music" not in exclude:
+            music = BeautifulSoup(content, "html.parser").find(
+                "div", class_="result-op", tpl="yl_music_song"
+            )
+            music = self.webSubParser.parse_music_block(music)
         # 预处理博客
         article_tags = BeautifulSoup(content, "html.parser").findAll("article")
         if "blog" not in exclude:
@@ -125,6 +131,9 @@ class Parser(BaseSpider):
         # 加载百科
         if "baike" not in exclude and baike:
             pre_results.append(dict(type="baike", result=baike))
+        # 加载音乐
+        if "music" not in exclude and music:
+            pre_results.append(dict(type="music", result=music))
         # 预处理源码
         soup = BeautifulSoup(content, "html.parser")
         results = soup.findAll("div", class_="result")
@@ -186,7 +195,7 @@ class Parser(BaseSpider):
             try:
                 result["tpl"]
             except:
-                print(result.prettify())
+                pass
             is_not_special = (
                 result["tpl"]
                 not in [
@@ -194,6 +203,7 @@ class Parser(BaseSpider):
                     "sp_realtime_bigpic5",
                     "bk_polysemy",
                     "tieba_general",
+                    "yl_music_song",
                 ]
                 and result.find("article") is None
             )
@@ -344,23 +354,34 @@ class Parser(BaseSpider):
             except KeyError:
                 url = item.find("dt").find("a")["data-href"]
             if item.find("dd", class_="video-content") is not None:
+                # 问题
+                __ = item.find("dd", class_="summary")
+                question = __.text.strip("问：") if __ is not None else None
                 item = item.find("div", class_="right")
                 tmp = item.findAll("div", class_="video-text")
-                # 简介
-                des = self._format(tmp[2].text)
+                # # 简介
+                # des = self._format(tmp[2].text)
+                answer = None
+                # 回答者
+                answerer = tmp[0].text.strip("\n").strip("回答:\u2002")
                 # 发布日期
-                date = self._format(
-                    tmp[1]
-                    .text.strip("时间:")
-                    .replace("年", "-")
-                    .replace("月", "-")
-                    .replace("日", "")
-                )
+                date = self._format(tmp[1].text.strip("时间:"))
                 # 回答总数
                 count = None
+                # 赞同数
+                try:
+                    agree = int(tmp[2].text.strip("获赞:\u2002").strip("次"))
+                except ValueError:
+                    agree = 0
+                    answer = tmp[2].text.strip()
+                type_ = "video"
             else:
-                # 简介
-                des = item.find("dd", class_="dd").text
+                # 回答
+                __ = item.find("dd", class_="answer")
+                answer = __.text.strip("答：") if __ is not None else None
+                # 问题
+                __ = item.find("dd", class_="summary")
+                question = __.text.strip("问：") if __ is not None else None
                 tmp = item.find("dd", class_="explain").findAll("span", class_="mr-8")
                 # 发布日期
                 date = (
@@ -371,13 +392,23 @@ class Parser(BaseSpider):
                     count = int(str(tmp[-1].text).strip("\n").strip("个回答"))
                 except:
                     count = None
+                # 回答者
+                answerer = tmp[-2].text.strip("\n").strip("回答者:\xa0")
+                # 赞同数
+                __ = item.find("dd", class_="explain").find("span", class_="ml-10")
+                agree = int(__.text.strip()) if __ is not None else 0
+                type_ = "normal"
             # 生成结果
             result = {
                 "title": title,
-                "des": des,
+                "question": question,
+                "answer": answer,
                 "date": date,
                 "count": count,
                 "url": url,
+                "agree": agree,
+                "answerer": answerer,
+                # "type": type_
             }
             results.append(result)  # 加入结果
         # 获取分页
@@ -404,28 +435,59 @@ class Parser(BaseSpider):
         """
         bs = BeautifulSoup(content, "html.parser")
         # 锁定结果div
-        data = bs.findAll("li", class_="result")
+        data = bs.findAll("div", class_="video_short")
+        if len(data) == 0:
+            return {"results": None}
         results = []
         for res in data:
+            __ = res.find("div", class_="video_small_intro")
+            _ = __.find("a")
             # 标题
-            title = res.find("a")["title"]
+            title = self._format(_.text)
             # 链接
-            url = "https://v.baidu.com" + res.find("a")["href"]
+            url = _["href"]
             # 封面图片链接
-            img = res.find("img", class_="img-normal-layer")["src"]
+            img = res.find("img", class_="border-radius")["src"].rsplit("?", 1)[0]
             # 时长
-            time = res.find("span", class_="info").text
+            length_ = res.find("span", class_="video_play_timer").text
+            _ = [int(i) for i in length_.split(":")]
+            if len(_) < 3:
+                length_ = time(minute=_[0], second=_[1])
+            else:
+                length_ = time(_[0], _[1], _[2])
+            # 简介
+            try:
+                des = __.find("div", class_="c-color-text").text
+            except AttributeError:
+                des = None
+            # 来源
+            try:
+                origin = self._format(__.find("span", class_="wetSource").text).strip(
+                    "来源："
+                )
+            except AttributeError:
+                origin = None
+            # 发布时间
+            pub_time: str = __.findAll("span", class_="c-font-normal")[-1].text.strip(
+                "发布时间："
+            )
+            try:
+                __ = [int(i) for i in pub_time.split("-")]
+            except ValueError:
+                __ = self._convert_time(pub_time, True)
+            pub_time = datetime(__[0], __[1], __[2])
             # 生成结果
-            result = {"title": title, "url": url, "img": img, "time": time}
+            result = {
+                "title": title,
+                "url": url,
+                "img": img,
+                "length": length_,
+                "des": des,
+                "origin": origin,
+                "pub_time": pub_time,
+            }
             results.append(result)  # 加入结果
-        # 分页
-        wrap = bs.find("div", class_="page-wrap")
-        pages_ = wrap.findAll("a", class_="filter-item")[:-1]
-        try:
-            pages = int(pages_[-1].text)
-        except:
-            pages = 0
-        return {"results": results, "pages": pages}
+        return {"results": results}
 
     def parse_news(self, content: str) -> dict:
         """解析百度资讯搜索的页面源代码.
@@ -443,7 +505,6 @@ class Parser(BaseSpider):
             .findAll("div")[1]
             .findAll("div", class_="result-op")
         )
-        # print(len(data))
         results = []
         for res in data:
             # 标题
@@ -456,20 +517,19 @@ class Parser(BaseSpider):
                 .find("span", class_="c-color-text")
                 .text
             )
+            _ = res.find("div", class_="c-span-last")
             # 作者
-            author = (
-                res.find("div", class_="c-span-last")
-                .find("div", class_="news-source")
-                .find("span", class_="c-gap-right")
-                .text
-            )
+            author = _.find("span", class_="c-gap-right").text
             # 发布日期
-            date = (
-                res.find("div", class_="c-span-last")
-                .find("div", class_="news-source")
-                .find("span", class_="c-color-gray2")
-                .text
-            )
+            try:
+                date = _.find("span", class_="c-color-gray2").text
+            except AttributeError:
+                date = None
+            # 封面图片
+            try:
+                cover = res.find("div", class_="c-img-radius-large").find("img")["src"]
+            except:
+                cover = None
             # 生成结果
             result = {
                 "title": title,
@@ -477,6 +537,7 @@ class Parser(BaseSpider):
                 "date": date,
                 "des": des,
                 "url": url,
+                "cover": cover,
             }
             results.append(result)  # 加入结果
         # 获取所有页数
@@ -505,7 +566,15 @@ class Parser(BaseSpider):
             type_ = self._format(
                 dt.find("p", class_="fl").find("span", class_="ic")["title"]
             ).upper()
-            tmp = dt.find("p", class_="fl").find("a")
+            _ = dt.find("p", class_="fl").findAll("a")
+            try:
+                if _[-1].find("span", class_="ico-vip").text.strip() == "VIP":
+                    is_vip = True
+                else:
+                    is_vip = False
+            except:
+                is_vip = False
+            tmp = _[0]
             title = self._format(tmp.text)
             url = tmp["href"]
             try:
@@ -533,23 +602,37 @@ class Parser(BaseSpider):
                 )
             )
             downloads = int(self._format(detail.text.split("|")[2].strip("次下载")))
+            uploader = {
+                "name": detail.find("a").text.strip("\n"),
+                "url": "https://wenku.baidu.com" + detail.find("a")["href"],
+            }
             result = {
                 "title": title,
                 "type": type_,
                 "url": url,
                 "des": des,
-                "date": date,
+                "pub_date": date,
                 "pages": pages,
                 "downloads": downloads,
+                "quality": quality,
+                "uploader": uploader,
+                "is_vip": is_vip,
             }
             results.append(result)
-        pages_ = bs.find("div", class_="page-content").findAll("a")
-        if "尾页" in pages_[-1].text:
-            total = int(int(pages_[-1]["href"].split("&")[-1].strip("pn=")) / 10 + 1)
-        else:
-            total = int(
-                bs.find("div", class_="page-content").find("span", class_="cur").text
-            )
+        try:
+            pages_ = bs.find("div", class_="page-content").findAll("a")
+            if "尾页" in pages_[-1].text:
+                total = int(
+                    int(pages_[-1]["href"].split("&")[-1].strip("pn=")) / 10 + 1
+                )
+            else:
+                total = int(
+                    bs.find("div", class_="page-content")
+                    .find("span", class_="cur")
+                    .text
+                )
+        except:
+            total = 1
         return {"results": results, "pages": total}
 
     def parse_jingyan(self, content: str) -> dict:
@@ -580,44 +663,55 @@ class Parser(BaseSpider):
                 .text
             )
             # 获取发布日期和分类，位于`<span class="cate"/>`中
-            tmp = self._format(
-                res.find("dd")
-                .find("div", class_="summary")
-                .find("span", class_="cate")
-                .text
-            ).split("-")
+            _ = res.find("dd").find("div", class_="summary").find("span", class_="cate")
+            tmp = self._format(_.text).split("-")
             # 发布日期
-            date = self._format(tmp[1])
+            pub_date = self._format(tmp[1]).replace("/", "-")
             # 分类
-            category = self._format(tmp[-1]).strip("分类：")
+            category = self._format(tmp[-1]).strip("分类：").split(">")
+            # 发布者
+            publisher = {
+                "name": self._format(_.find("a").text),
+                "url": "https://jingyan.baidu.com" + _.find("a")["href"],
+            }
             # 支持票数
             votes = int(
                 self._format(
                     res.find("dt").find("span", class_="succ-times").text
                 ).strip("得票")
             )
+            # 是否为原创经验
+            try:
+                res.find("span", class_="i-original").text
+                original = True
+            except:
+                original = False
+            # 是否为优秀经验
+            try:
+                res.find("span", class_="i-good-exp").text
+                outstanding = True
+            except:
+                outstanding = False
             # 生成结果
             result = {
                 "title": title,
                 "url": url,
                 "des": des,
-                "date": date,
+                "pub_date": pub_date,
                 "category": category,
                 "votes": votes,
+                "publisher": publisher,
+                "is_original": original,
+                "is_outstanding": outstanding,
             }
             results.append(result)  # 加入结果到集合中
         # 获取分页
-        pages_ = bs.find("div", id="pg").findAll("a")[-1]
-        # 既不是最后一页也没有超出最后一页
-        if "尾页" in pages_.text:
-            # 获取尾页并加一
-            total = int(int(pages_["href"].split("&")[-1].strip("pn=")) / 10) + 1
-        # 是最后一页或者是超过了最后一页
-        else:
-            # 重新获取分页
-            pages_ = bs.find("div", id="pg").findAll("a")[1]
-            # 获取尾页并加一
-            total = int(int(pages_["href"].split("&")[-1].strip("pn=")) / 10) + 1
+        pages_ = bs.find("div", class_="pager-wrap").findAll("a", class_="pg-btn")
+        if not pages_:
+            return {"results": results, "pages": 1}
+        if "下一页" in pages_[-1].text:
+            pages_ = pages_[:-1]
+        total = int(self._format(pages_[-1].text))
         return {"results": results, "pages": total}
 
     def parse_baike(self, content: str) -> dict:
@@ -655,7 +749,9 @@ class Parser(BaseSpider):
             # 简介
             des = self._format(res.find("p", class_="result-summary").text)
             # 更新日期
-            date = self._format(res.find("span", class_="result-date").text)
+            upd_date = self._format(res.find("span", class_="result-date").text)
             # 生成结果
-            results.append({"title": title, "des": des, "date": date, "url": url})
-        return {"results": results, "pages": total}
+            results.append(
+                {"title": title, "des": des, "upd_date": upd_date, "url": url}
+            )
+        return {"results": results, "total": total}
