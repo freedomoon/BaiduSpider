@@ -161,6 +161,7 @@ class WebSubParser(BaseSpider):
         """
         if baike is None:
             return []
+        b_url = json.loads(baike["data-log"])["mu"]
         baike = baike.find("article")
         title = baike.find("h3", class_="c-title").text
         baike = baike.find("section")
@@ -186,6 +187,7 @@ class WebSubParser(BaseSpider):
             "sections": sections,
             "origin": origin,
             "labels": labels,
+            "url": b_url,
         }
         return {"result": result}
 

@@ -1,8 +1,12 @@
 import inspect
 import os
+from functools import wraps
 
 
 def handle_err(func):  # pragma: no cover
+    """处理报错"""
+
+    @wraps(func)
     def wrapper(*args, **kwargs):
         try:
             return func(*args, **kwargs)

@@ -62,7 +62,7 @@ class WebSubParser(BaseSpider):
         """解析视频子块
 
         Args:
-            news (BeautifulSoup): 从源HTML代码中提取的视频块BeautifulSoup对象
+            video (BeautifulSoup): 从源HTML代码中提取的视频块BeautifulSoup对象
 
         Returns:
             dict: 解析后自动生成的Python结果字典对象
@@ -103,7 +103,7 @@ class WebSubParser(BaseSpider):
         """解析百科子块
 
         Args:
-            news (BeautifulSoup): 从源HTML代码中提取的百科块BeautifulSoup对象
+            baike (BeautifulSoup): 从源HTML代码中提取的百科块BeautifulSoup对象
 
         Returns:
             dict: 解析后自动生成的Python结果字典对象
@@ -142,7 +142,7 @@ class WebSubParser(BaseSpider):
         """解析贴吧子块
 
         Args:
-            news (BeautifulSoup): 从源HTML代码中提取的贴吧块BeautifulSoup对象
+            tieba (BeautifulSoup): 从源HTML代码中提取的贴吧块BeautifulSoup对象
 
         Returns:
             dict: 解析后自动生成的Python结果字典对象
@@ -207,7 +207,7 @@ class WebSubParser(BaseSpider):
         """解析博客子块
 
         Args:
-            news (BeautifulSoup): 从源HTML代码中提取的博客块BeautifulSoup对象
+            blog (BeautifulSoup): 从源HTML代码中提取的博客块BeautifulSoup对象
 
         Returns:
             dict: 解析后自动生成的Python结果字典对象
@@ -253,7 +253,7 @@ class WebSubParser(BaseSpider):
         """解析Gitee仓库子块
 
         Args:
-            news (BeautifulSoup): 从源HTML代码中提取的码云仓库块BeautifulSoup对象
+            gitee (BeautifulSoup): 从源HTML代码中提取的码云仓库块BeautifulSoup对象
 
         Returns:
             dict: 解析后自动生成的Python结果字典对象
@@ -302,7 +302,7 @@ class WebSubParser(BaseSpider):
         """解析音乐子块
 
         Args:
-            news (BeautifulSoup): 从源HTML代码中提取的音乐块BeautifulSoup对象
+            music (BeautifulSoup): 从源HTML代码中提取的音乐块BeautifulSoup对象
 
         Returns:
             dict: 解析后自动生成的Python结果字典对象

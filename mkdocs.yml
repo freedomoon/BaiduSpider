@@ -1,0 +1,87 @@
+site_name: BaiduSpider
+
+repo_url: https://github.com/BaiduSpider/BaiduSpider
+repo_name: BaiduSpider/BaiduSpider
+
+theme:
+  name: material
+  logo: assets/logo-dark.png
+  favicon: assets/logo.png
+  features:
+    - navigation.tabs
+    - navigation.top
+    - navigation.expand
+  language: zh
+  palette:
+    - scheme: default
+      primary: blue
+      accent: blue
+      toggle:
+        icon: material/weather-sunny
+        name: Switch to dark mode
+    - scheme: slate
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/weather-night
+        name: Switch to light mode
+
+nav:
+  - 快速上手: index.md
+  - 指南:
+    - 简介: guide/index.md
+    - 网页搜索: guide/web.md
+  - API:
+    - 简介: api/index.md
+    - baiduspider:
+      - __init__.py: api/baiduspider/__init__.md
+      - _spider.py: api/baiduspider/_spider.md
+      - util.py: api/baiduspider/util.md
+      - errors:
+        - __init__.py: api/baiduspider/errors/__init__.md
+      - parser:
+        - __init__.py: api/baiduspider/parser/__init__.md
+        - subparser.py: api/baiduspider/parser/subparser.md
+      - models:
+        - typings:
+          - typings_baike.py: api/baiduspider/models/typings/typings_baike.md
+          - typings_jingyan.py: api/baiduspider/models/typings/typings_jingyan.md
+          - typings_news.py: api/baiduspider/models/typings/typings_news.md
+          - typings_pic.py: api/baiduspider/models/typings/typings_pic.md
+          - typings_video.py: api/baiduspider/models/typings/typings_video.md
+          - typings_web.py: api/baiduspider/models/typings/typings_web.md
+          - typings_wenku.py: api/baiduspider/models/typings/typings_wenku.md
+          - typings_zhidao.py: api/baiduspider/models/typings/typings_zhidao.md
+        - __init__.py: api/baiduspider/models/__init__.md
+        - baike.py: api/baiduspider/models/baike.md
+        - jingyan.py: api/baiduspider/models/jingyan.md
+        - news.py: api/baiduspider/models/news.md
+        - pic.py: api/baiduspider/models/pic.md
+        - video.py: api/baiduspider/models/video.md
+        - web.py: api/baiduspider/models/web.md
+        - wenku.py: api/baiduspider/models/wenku.md
+        - zhidao.py: api/baiduspider/models/zhidao.md
+      - mobile:
+        - __init__.py: api/baiduspider/mobile/__init__.md
+        - parser:
+          - __init__.py: api/baiduspider/mobile/parser/__init__.md
+          - subparser.py: api/baiduspider/mobile/parser/subparser.md
+        - models:
+          - web.py: api/baiduspider/mobile/models/web.md
+          - typings:
+            - typings_web.py: api/baiduspider/mobile/models/typings/typings_web.md
+
+markdown_extensions:
+  - pymdownx.highlight
+  - pymdownx.superfences
+  - pymdownx.inlinehilite
+  - pymdownx.superfences
+  - pymdownx.tabbed
+  - admonition
+  - pymdownx.details
+  - toc:
+      permalink: ⚓︎
+
+plugins:
+  - search
+  - mkdocstrings

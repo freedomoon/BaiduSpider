@@ -1,6 +1,6 @@
-"""移动端网页搜索结果模型类型注释文件
+"""移动端网页搜索返回值模型模块
 
-此模块中定义了所有现有移动端网页搜索内所有模块的结果模型类型注释类，便于现代编辑器自动补全，提供更好的编码体验。
+此文件定义的所有现有的移动端网页搜索返回值模型并编写了自动构建函数。
 """
 from datetime import datetime, time
 from baiduspider.mobile.models.typings.typings_web import *
@@ -8,9 +8,21 @@ from baiduspider.models import get_attr, convert_time
 
 
 class WebVideoDetail(WebVideoDetail):
-    """网页搜索视频详情搜索结果模型类型注释类。
+    """视频详情搜索结果模型
 
-    详见`baiduspider.mobile.models.web.WebVideoDetail`类。
+    这是一个遵照BaiduSpider移动端网页搜索视频详情搜索结果结果模型创建的返回模型类。
+
+    Attributes:
+        author (str): 搜索结果作者（来源）
+        author_avatar (str): 搜索结果作者（来源）头像
+        duration (datetime.time): 搜索结果时长
+        labels (List[str]): 搜索结果标签列表
+        poster (str): 搜索结果海报图片链接
+        pub_time (datetime.datetime): 搜索结果发表时间
+        title (str): 搜索结果标题
+        url (str): 搜索结果链接
+        video_num (int): 搜索结果“合集”中视频数量
+        plain (dict): 源搜索结果字典
     """
 
     def __init__(self) -> None:
@@ -24,7 +36,7 @@ class WebVideoDetail(WebVideoDetail):
         self.url = ""
         self.video_num = 0
         self.plain = {}
-    
+
     @staticmethod
     def _build_instance(plain: dict) -> WebVideoDetail:
         __returns = WebVideoDetail()
@@ -32,7 +44,10 @@ class WebVideoDetail(WebVideoDetail):
         __returns.author = get_attr(plain, "author")
         __returns.author_avatar = get_attr(plain, "author_avatar")
         try:
-            __returns.duration = time(minute=int(get_attr(plain, "duration").split(":")[0]), second=int(get_attr(plain, "duration").split(":")[1]))
+            __returns.duration = time(
+                minute=int(get_attr(plain, "duration").split(":")[0]),
+                second=int(get_attr(plain, "duration").split(":")[1]),
+            )
         except:
             __returns.duration = None
         for i in get_attr(plain, "labels"):
@@ -46,16 +61,21 @@ class WebVideoDetail(WebVideoDetail):
 
 
 class WebVideoTag(WebVideoTag):
-    """网页搜索视频标签搜索结果模型类型注释类。
+    """视频标签搜索结果模型
 
-    详见`baiduspider.mobile.models.web.WebVideoTag`类。
+    这是一个遵照BaiduSpider移动端网页搜索视频标签搜索结果结果模型创建的返回模型类。
+
+    Attributes:
+        text (str): 标签文字
+        url (str): 标签链接
+        plain (dict): 源搜索结果字典
     """
 
     def __init__(self) -> None:
         self.text = ""
         self.url = ""
         self.plain = {}
-    
+
     @staticmethod
     def _build_instance(plain: dict) -> WebVideoTag:
         __returns = WebVideoTag()
@@ -66,9 +86,14 @@ class WebVideoTag(WebVideoTag):
 
 
 class WebVideo(WebVideo):
-    """网页搜索视频搜索结果模型类型注释类。
+    """视频搜索结果模型
 
-    详见`baiduspider.mobile.models.web.WebVideo`类。
+    这是一个遵照BaiduSpider移动端网页搜索视频搜索结果结果模型创建的返回模型类。
+
+    Attributes:
+        results (List[WebVideoDetail]): 搜索结果详情列表
+        tags (List[WebVideoTag]): 搜索结果标签列表
+        plain (dict): 源搜索结果字典
     """
 
     def __init__(self) -> None:
@@ -87,10 +112,19 @@ class WebVideo(WebVideo):
         return __returns
 
 
-class WebShortVideo(WebShortVideo):
-    """网页搜索短视频搜索结果模型类型注释类。
+class WebShortVideoDetail(WebShortVideoDetail):
+    """短视频详情搜索结果模型
 
-    详见`baiduspider.mobile.models.web.WebShort_video`类。
+    这是一个遵照BaiduSpider移动端网页搜索短视频详情搜索结果结果模型创建的返回模型类。
+
+    Attributes:
+        author (str): 搜索结果作者（来源）
+        author_avatar (str): 搜索结果作者（来源）头像
+        play_times (int): 搜索结果播放次数
+        poster (str): 搜索结果海报图片链接
+        title (str): 搜索结果标题
+        url (str): 搜索结果链接
+        plain (dict): 源搜索结果字典
     """
 
     def __init__(self) -> None:
@@ -101,7 +135,7 @@ class WebShortVideo(WebShortVideo):
         self.title = ""
         self.url = ""
         self.plain = {}
-    
+
     @staticmethod
     def _build_instance(plain: dict) -> WebShortVideo:
         __returns = WebShortVideo()
@@ -115,17 +149,48 @@ class WebShortVideo(WebShortVideo):
         return __returns
 
 
-class WebBaikeSection(WebBaikeSection):
-    """网页搜索百科目录搜索结果模型类型注释类。
+class WebShortVideo(WebShortVideo):
+    """短视频搜索结果模型
 
-    详见`baiduspider.mobile.models.web.WebBaikeSection`类。
+    这是一个遵照BaiduSpider移动端网页搜索短视频搜索结果结果模型创建的返回模型类。
+
+    Attributes:
+        results (List[WebShortVideoDetail]): 搜索结果详情列表
+        total (int): 搜索结果总数
+        plain (dict): 源搜索结果字典
+    """
+
+    def __init__(self) -> None:
+        self.results = []
+        self.total = 0
+
+    @staticmethod
+    def _build_instance(plain: dict) -> WebShortVideo:
+        __returns = WebShortVideo()
+        __returns.plain = plain
+        if get_attr(plain, "results") is not None:
+            for i in get_attr(plain, "results"):
+                __returns.results.append(WebShortVideoDetail._build_instance(i))
+        __returns.total = get_attr(plain, "total")
+        return __returns
+
+
+class WebBaikeSection(WebBaikeSection):
+    """百科章节搜索结果模型
+
+    这是一个遵照BaiduSpider移动端网页搜索百科章节搜索结果结果模型创建的返回模型类。
+
+    Attributes:
+        text (str): 搜索结果文字
+        url (str): 搜索结果链接
+        plain (dict): 源搜索结果字典
     """
 
     def __init__(self) -> None:
         self.text = ""
         self.url = ""
         self.plain = {}
-    
+
     @staticmethod
     def _build_instance(plain: dict) -> WebBaikeSection:
         __returns = WebBaikeSection()
@@ -136,9 +201,19 @@ class WebBaikeSection(WebBaikeSection):
 
 
 class WebBaike(WebBaike):
-    """网页搜索百科搜索结果模型类型注释类。
+    """百科搜索结果模型
 
-    详见`baiduspider.mobile.models.web.WebBaike`类。
+    这是一个遵照BaiduSpider移动端网页搜索百科搜索结果结果模型创建的返回模型类。
+
+    Attributes:
+        des (str): 搜索结果简介
+        labels (List[str]): 搜索结果标签列表
+        origin (str): 搜索结果来源
+        poster (str): 搜索结果海报图片链接
+        sections (List[WebBaikeSection]): 搜索结果章节列表
+        title (str): 搜索结果标题
+        url (str): 搜索结果链接
+        plain (dict): 源搜索结果字典
     """
 
     def __init__(self) -> None:
@@ -148,8 +223,9 @@ class WebBaike(WebBaike):
         self.poster = ""
         self.sections = []
         self.title = ""
+        self.url = ""
         self.plain = {}
-    
+
     @staticmethod
     def _build_instance(plain: dict) -> WebBaike:
         __returns = WebBaike()
@@ -163,13 +239,26 @@ class WebBaike(WebBaike):
             for i in get_attr(plain, "sections"):
                 __returns.sections.append(WebBaikeSection._build_instance(i))
         __returns.title = get_attr(plain, "title")
+        __returns.url = get_attr(plain, "url")
         return __returns
 
 
-class WebReyi(WebReyi):
-    """网页搜索热议搜索结果模型类型注释类。
+class WebReyiDetail(WebReyiDetail):
+    """热议详情搜索结果模型
 
-    详见`baiduspider.mobile.models.web.WebReyi`类。
+    这是一个遵照BaiduSpider移动端网页搜索热议详情搜索结果结果模型创建的返回模型类。
+
+    Attributes:
+        author (str): 搜索结果作者（来源）
+        author_avatar (str): 搜索结果作者（来源）头像
+        comments (int): 搜索结果评论数
+        des (str): 搜索结果简介
+        images (List[str]): 搜索结果图片列表
+        likes (int): 搜索结果喜欢数
+        origin (str): 搜索结果来源（作者）
+        pub_time (datetime.datetime): 搜索结果发布时间
+        site (str): 搜索结果发布站点
+        plain (dict): 源搜索结果字典
     """
 
     def __init__(self) -> None:
@@ -180,13 +269,13 @@ class WebReyi(WebReyi):
         self.images = []
         self.likes = 0
         self.origin = ""
-        self.pub_time = ""
+        self.pub_time = None
         self.site = ""
         self.plain = {}
-    
+
     @staticmethod
-    def _build_instance(plain: dict) -> WebReyi:
-        __returns = WebReyi()
+    def _build_instance(plain: dict) -> WebReyiDetail:
+        __returns = WebReyiDetail()
         __returns.plain = plain
         __returns.author = get_attr(plain, "author")
         __returns.author_avatar = get_attr(plain, "author_avatar")
@@ -197,15 +286,52 @@ class WebReyi(WebReyi):
                 __returns.images.append(i)
         __returns.likes = get_attr(plain, "likes")
         __returns.origin = get_attr(plain, "origin")
-        __returns.pub_time = get_attr(plain, "pub_time")
+        __returns.pub_time = convert_time(get_attr(plain, "pub_time"))
         __returns.site = get_attr(plain, "site")
         return __returns
 
 
-class WebKnowledgeDetail(WebKnowledgeDetail):
-    """网页搜索相关知识详情搜索结果模型类型注释类。
+class WebReyi(WebReyi):
+    """热议搜索结果模型
 
-    详见`baiduspider.mobile.models.web.WebKnowledgeDetail`类。
+    这是一个遵照BaiduSpider移动端网页搜索视频详情搜索结果结果模型创建的返回模型类。
+
+    Attributes:
+        results (List[WebReyiDetail]): 搜索结果详情列表
+        total (int): 搜索结果总数
+        url (str): 搜索结果链接
+        plain (dict): 源搜索结果字典
+    """
+
+    def __init__(self) -> None:
+        self.results = []
+        self.total = 0
+        self.url = ""
+        self.plain = {}
+
+    @staticmethod
+    def _build_instance(plain: dict) -> WebReyi:
+        __returns = WebReyi()
+        __returns.plain = plain
+        if get_attr(plain, "results") is not None:
+            for i in get_attr(plain, "results"):
+                __returns.results.append(WebReyiDetail._build_instance(i))
+        __returns.total = get_attr(plain, "total")
+        __returns.url = get_attr(plain, "url")
+        return __returns
+
+
+class WebKnowledgeDetail(WebKnowledgeDetail):
+    """相关知识详情搜索结果模型
+
+    这是一个遵照BaiduSpider移动端网页搜索相关知识详情搜索结果结果模型创建的返回模型类。
+
+    Attributes:
+        des (str): 搜索结果简介
+        image (str): 搜索结果图片链接
+        title (str): 搜索结果标题
+        url (str): 搜索结果链接
+        plain (dict): 源搜索结果字典
     """
 
     def __init__(self) -> None:
@@ -214,7 +340,7 @@ class WebKnowledgeDetail(WebKnowledgeDetail):
         self.title = ""
         self.url = ""
         self.plain = {}
-    
+
     @staticmethod
     def _build_instance(plain: dict) -> WebKnowledgeDetail:
         __returns = WebKnowledgeDetail()
@@ -227,16 +353,21 @@ class WebKnowledgeDetail(WebKnowledgeDetail):
 
 
 class WebKnowledge(WebKnowledge):
-    """网页搜索相关知识搜索结果模型类型注释类。
+    """相关知识搜索结果模型
 
-    详见`baiduspider.mobile.models.web.WebKnowledge`类。
+    这是一个遵照BaiduSpider移动端网页搜索相关知识搜索结果结果模型创建的返回模型类。
+
+    Attributes:
+        results (List[WebKnowledgeDetail]): 搜索结果详情列表
+        title (str): 搜索结果标题
+        plain (dict): 源搜索结果字典
     """
 
     def __init__(self) -> None:
         self.results = []
         self.title = ""
         self.plain = {}
-    
+
     @staticmethod
     def _build_instance(plain: dict) -> WebKnowledge:
         __returns = WebKnowledge()
@@ -248,9 +379,16 @@ class WebKnowledge(WebKnowledge):
 
 
 class WebNormal(WebNormal):
-    """网页搜索普通搜索结果模型类型注释类。
+    """普通搜索结果模型
 
-    详见`baiduspider.mobile.models.web.WebNormal`类。
+    这是一个遵照BaiduSpider移动端网页搜索普通搜索结果结果模型创建的返回模型类。
+
+    Attributes:
+        des (str): 搜索结果简介
+        image (str): 搜索结果图片链接
+        title (str): 搜索结果标题
+        url (str): 搜索结果链接
+        plain (dict): 源搜索结果字典
     """
 
     def __init__(self) -> None:
@@ -259,7 +397,7 @@ class WebNormal(WebNormal):
         self.title = ""
         self.url = ""
         self.plain = {}
-    
+
     @staticmethod
     def _build_instance(plain: dict) -> WebNormal:
         __returns = WebNormal()
@@ -272,9 +410,18 @@ class WebNormal(WebNormal):
 
 
 class WebResult(WebResult):
-    """网页搜索搜索结果模型类型注释类。
+    """网页搜索结果模型
 
-    详见`baiduspider.mobile.models.web.Web`类。
+    这是一个遵照BaiduSpider移动端网页搜索结果结果模型创建的返回模型类。
+
+    Attributes:
+        video (Union[WebVideo, None]): 视频搜索结果
+        short_video (Union[WebShortVideo, None]): 短视频搜索结果
+        baike (Union[WebBaike, None]): 百科搜索结果
+        reyi (Union[WebReyi, None]): 热议搜索结果
+        knowledge (Union[WebKnowledge, None]): 相关知识搜索结果
+        normal (List[WebNormal]): 普通搜索结果列表
+        plain (dict): 源搜索结果字典
     """
 
     def __init__(self) -> None:
@@ -282,10 +429,10 @@ class WebResult(WebResult):
         self.short_video = None
         self.baike = None
         self.reyi = None
-        self.normal = []
         self.knowledge = None
+        self.normal = []
         self.plain = {}
-    
+
     @staticmethod
     def _build_instance(plain: list) -> WebResult:
         __returns = WebResult()
@@ -301,4 +448,9 @@ class WebResult(WebResult):
                 __returns.reyi = WebReyi._build_instance(p)
             elif get_attr(p, "type") == "knowledge":
                 __returns.knowledge = WebKnowledge._build_instance(p)
+            elif get_attr(p, "type") == "baike":
+                __returns.baike = WebBaike._build_instance(get_attr(p, "result"))
         return __returns
+
+    def __repr__(self) -> str:
+        return "<object WebResult>"

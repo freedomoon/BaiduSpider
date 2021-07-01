@@ -13,6 +13,7 @@ download.py
 /dist/
 /BaiduSpider.egg-info/
 htmlcov/
+/site/
 .coverage
 .coveragerc
 exp.*

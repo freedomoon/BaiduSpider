@@ -11,6 +11,7 @@ from bs4 import BeautifulSoup
 
 class Parser(BaseSpider):
     def __init__(self) -> None:
+        """百度搜索解析器"""
         super().__init__()
         self.webSubParser = WebSubParser()
 

@@ -4,10 +4,13 @@ from typing import Union
 
 
 def convert_time(t) -> Union[datetime, None]:
+    """将字符串形式的日期转换为`datetime.datetime`形式的时间"""
     if t is None:
         return None
     if t == "今天":
         return datetime.now()
+    if "-" in t and len(t.split("-")) == 2:
+        t = str(datetime.now().year) + "-" + t
     flag = False
     if "昨天" in t:
         delta = 1
@@ -42,6 +45,7 @@ def convert_time(t) -> Union[datetime, None]:
 
 
 def get_attr(d: dict, t: str):
+    """获取字典`d`下的`t`"""
     try:
         return d[t]
     except:

@@ -263,17 +263,17 @@ class BaiduSpider(BaseSpider):
             ```python
             BaiduSpider().search_web('搜索词', exclude=['要屏蔽的子部件列表'])
             ```
-            可选值：['news', 'video', 'baike', 'tieba', 'blog', 'gitee', 'related', 'calc', 'music']，
+            可选值：`['news', 'video', 'baike', 'tieba', 'blog', 'gitee', 'related', 'calc', 'music']`，
             分别表示：资讯，视频，百科，贴吧，博客，Gitee代码仓库，相关搜索，计算。
-            当exclude=['all']时，将仅保留基本搜索结果和搜索结果总数。
-            如果'all'在exclude列表里，则将忽略列表中的剩余部件，返回exclude=['all']时的结果。
+            当`exclude=['all']`时，将仅保留基本搜索结果和搜索结果总数。
+            如果`all`在`exclude`列表里，则将忽略列表中的剩余部件，返回`exclude=['all']`时的结果。
 
         - 按时间筛选：
             ```python
             BaiduSpider().search_web('搜索词', time=(开始时间, 结束时间))
             ```
             其中，开始时间和结束时间均为datetime.datetime类型，或者是使用time.time()函数生成的时间戳。
-            time参数也可以是以下任意一个字符串：['day', 'week', 'month', 'year']。它们分别表示：一天内、
+            time参数也可以是以下任意一个字符串：`['day', 'week', 'month', 'year']`。它们分别表示：一天内、
             一周内、一月内、一年内。当`time`为`None`时，BaiduSpider将展示全部结果，忽略筛选。
             如果参数非法，BaiduSpider会忽略此次筛选。
 

@@ -4,3 +4,8 @@ twine
 coverage
 coveralls
 black
+mkdocs
+mkdocs-material
+mkdocs-minify-plugin
+mkdocs-redirects
+mike

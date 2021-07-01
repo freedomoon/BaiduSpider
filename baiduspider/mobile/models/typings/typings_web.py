@@ -49,10 +49,10 @@ class WebVideo(object):
         self.plain: dict
 
 
-class WebShortVideo(object):
-    """网页搜索短视频搜索结果模型类型注释类。
+class WebShortVideoDetail(object):
+    """网页搜索短视频详情搜索结果模型类型注释类。
 
-    详见`baiduspider.mobile.models.web.WebShort_video`类。
+    详见`baiduspider.mobile.models.web.WebShortVideoDetail`类。
     """
 
     def __init__(self) -> None:
@@ -62,6 +62,18 @@ class WebShortVideo(object):
         self.poster: str
         self.title: str
         self.url: str
+        self.plain: dict
+
+
+class WebShortVideo(object):
+    """网页搜索短视频搜索结果模型类型注释类。
+
+    详见`baiduspider.mobile.models.web.WebShortVideo`类。
+    """
+
+    def __init__(self) -> None:
+        self.results: List[WebShortVideoDetail]
+        self.total: int
         self.plain: dict
 
 
@@ -90,13 +102,14 @@ class WebBaike(object):
         self.poster: str
         self.sections: List[WebBaikeSection]
         self.title: str
+        self.url: str
         self.plain: dict
 
 
-class WebReyi(object):
-    """网页搜索热议搜索结果模型类型注释类。
+class WebReyiDetail(object):
+    """网页搜索热议详情搜索结果模型类型注释类。
 
-    详见`baiduspider.mobile.models.web.WebReyi`类。
+    详见`baiduspider.mobile.models.web.WebReyiDetail`类。
     """
 
     def __init__(self) -> None:
@@ -107,8 +120,21 @@ class WebReyi(object):
         self.images: List[str]
         self.likes: int
         self.origin: str
-        self.pub_time: str
+        self.pub_time: datetime
         self.site: str
+        self.plain: dict
+
+
+class WebReyi(object):
+    """网页搜索热议搜索结果模型类型注释类。
+
+    详见`baiduspider.mobile.models.web.WebReyi`类。
+    """
+
+    def __init__(self) -> None:
+        self.results: List[WebReyiDetail]
+        self.total: int
+        self.url: str
         self.plain: dict
 
 

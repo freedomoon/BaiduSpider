@@ -1,6 +1,7 @@
 import json
 from baiduspider._spider import BaseSpider
 from pprint import pprint
+import os
 
 
 class Generator(BaseSpider):
@@ -22,8 +23,16 @@ from typing import List, Union
     def _reformat_type(self, x: str) -> str:
         return str(x).replace("<class '", "").replace("'>", "")
 
-    def generate(self, filepath: str, jsonpath: str, basename: str, json_plain: dict = None, write_template: bool = True):
-        if json_plain is not None: data = json_plain
+    def generate(
+        self,
+        filepath: str,
+        jsonpath: str,
+        basename: str,
+        json_plain: dict = None,
+        write_template: bool = True,
+    ):
+        if json_plain is not None:
+            data = json_plain
         else:
             with open(jsonpath, "r", encoding="utf-8") as f:
                 data = json.load(f)
@@ -35,7 +44,7 @@ from typing import List, Union
         else:
             pre_out = ""
         try:
-            new_basename = basename + (data['type'].capitalize())
+            new_basename = basename + (data["type"].capitalize())
         except:
             new_basename = basename
         # if type(data) != list:
@@ -53,7 +62,8 @@ from typing import List, Union
             data = [data]
         for _ in data:
             for i in _:
-                if i == "type": continue
+                if i == "type":
+                    continue
                 out += f"        self.{i}: "
                 # print(_)
                 # try:
@@ -80,13 +90,15 @@ from typing import List, Union
                         continue
                     _[i]["type"] = _["type"]
                     print(new_basename, _["type"], i)
-                    if new_basename.endswith(_["type"].capitalize()): _[i]["type"] = i
+                    if new_basename.endswith(_["type"].capitalize()):
+                        _[i]["type"] = i
                     pre_out += self.generate(filepath, None, new_basename, _[i], False)
                     out += new_basename + _[i]["type"].capitalize()
                 out += "\n"
-        out = pre_out + out +"\n\n"
+        out = pre_out + out + "\n\n"
         # print(out)
-        if not write_template: return out
+        if not write_template:
+            return out
         with open(filepath, "w", encoding="utf-8") as f:
             f.write(out)
         return out
@@ -97,16 +109,15 @@ from typing import List, Union
         for d in file_data:
             name = d.split("self.")[-1].split(":")[0]
             type_ = d.split(": ")[-1]
-            if name == "plain": continue
-            data.append({
-                "name": name,
-                "type": type_
-            })
+            if name == "plain":
+                continue
+            data.append({"name": name, "type": type_})
         out = f"    @staticmethod\n    def _build_instance(plain: dict) -> {class_name}:\n        __returns = {class_name}()\n"
         out += "        __returns.plain = plain\n"
         for d in data:
             out += "        "
-            if "List" not in d["type"]: out += f"__returns.{d['name']} = "
+            if "List" not in d["type"]:
+                out += f"__returns.{d['name']} = "
             if d["type"] in ["str", "int", "bool"]:
                 out += f"get_attr(plain, \"{d['name']}\")"
             elif "List" in d["type"]:
@@ -123,9 +134,42 @@ from typing import List, Union
             else:
                 out += f""
             out += "\n"
-        print(out)
+        return out
+
+    def generate_api_docs(self, path: str, outputpath: str) -> None:
+        files = os.listdir(path)
+        for f in files:
+            if "." not in f:
+                continue
+            try:
+                with open(
+                    outputpath + f.split(".")[0] + ".md", "w", encoding="utf-8"
+                ) as file:
+                    name = (
+                        path.strip(".").replace("/", ".").lstrip(".") + f.split(".")[0]
+                    )
+                    file.write(
+                        f"::: {name}\n    rendering:\n      show_root_heading: true\n      show_source: true"
+                    )
+            except FileNotFoundError:
+                os.mkdir(outputpath)
+                with open(
+                    outputpath + f.split(".")[0] + ".md", "w", encoding="utf-8"
+                ) as file:
+                    name = (
+                        path.strip(".").replace("/", ".").lstrip(".") + f.split(".")[0]
+                    )
+                    file.write(
+                        f"::: {name}\n    rendering:\n      show_root_heading: true\n      show_source: true"
+                    )
+            t = f.split(".")[0]
+            t2 = outputpath.split("/", 2)[-1]
+            print(f"        - {f}: {t2}{t}.md")
 
 
 if __name__ == "__main__":
     generator = Generator("web")
-    generator.generate_build_instance("./test.py", "WebVideoDetail")
+    generator.generate_api_docs(
+        "./baiduspider/mobile/models/typings/",
+        "./docs/api/baiduspider/mobile/models/typings/",
+    )

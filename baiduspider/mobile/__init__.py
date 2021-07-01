@@ -18,12 +18,25 @@ __all__ = ["BaiduMobileSpider"]
 
 class BaiduMobileSpider(BaseSpider):
     def __init__(self) -> None:
+        """爬取百度移动端的搜索结果.
+
+        本类的所有成员方法都遵循下列格式：
+
+            {
+                'results': <一个列表，表示搜索结果，内部的字典会因为不同的成员方法而改变>,
+                'total': <一个正整数，表示搜索结果的最大页数，可能会因为搜索结果页码的变化而变化，因为百度不提供总共的搜索结果页数>
+            }
+
+        目前仅支持百度网页搜索的部分内容爬取，返回的搜索结果无广告。继承自``BaseSpider``。
+
+        BaiduMobileSpider.`search_web(self: BaiduMobileSpider, query: str, pn: int = 1) -> WebResult`: 移动端百度网页搜索
+        """
         super().__init__()
         # 爬虫名称（不是请求的，只是用来表识）
         self.spider_name = "BaiduSpider"
         # 设置请求头
         self.headers = {
-            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.111 Safari/537.36",
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.114 Safari/537.36 Edg/91.0.864.59",
             "Referer": "https://m.baidu.com",
             "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",
             "Accept-Encoding": "gzip, deflate, br",
@@ -33,6 +46,27 @@ class BaiduMobileSpider(BaseSpider):
         self.EMPTY = {"results": []}
 
     def search_web(self, query: str, pn: int = 1) -> WebResult:
+        """搜索百度移动端网页搜索结果。
+
+        基本使用：
+
+        ```python
+        BaiduMobileSpider().search_web('搜索词')
+        ```
+
+        带页码：
+
+        ```python
+        BaiduMobileSpider().search_web('搜索词', pn=2)
+        ```
+
+        Args:
+            query (str): 要爬取的搜索词.
+            pn (int, optional): 爬取的页码. Defaults to 1.
+
+        Returns:
+            WebResult: 爬取的返回值和搜索结果
+        """
         error = None
         try:
             text = quote(query, "utf-8")

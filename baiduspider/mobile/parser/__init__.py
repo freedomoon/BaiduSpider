@@ -11,6 +11,7 @@ from bs4 import BeautifulSoup
 
 class MobileParser(BaseSpider):
     def __init__(self) -> None:
+        """百度移动端搜索解析器"""
         super().__init__()
         self.webSubParser = WebSubParser()
         self.WEB_NORMAL = "1599"
@@ -23,6 +24,14 @@ class MobileParser(BaseSpider):
 
     @handle_err
     def parse_web(self, content: str) -> dict:
+        """解析百度网页搜索的页面源代码.
+
+        Args:
+            content (str): 已经转换为UTF-8编码的百度网页搜索HTML源码
+
+        Returns:
+            dict: 解析后的结果
+        """
         soup = BeautifulSoup(content, "html.parser")
         res_normal_container = soup.findAll(
             "div", class_="c-result", new_srcid=self.WEB_NORMAL
