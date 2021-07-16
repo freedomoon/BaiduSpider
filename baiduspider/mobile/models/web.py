@@ -4,7 +4,7 @@
 """
 from datetime import datetime, time
 from baiduspider.mobile.models.typings.typings_web import *
-from baiduspider.models import get_attr, convert_time
+from baiduspider.mobile.models import get_attr, convert_time
 
 
 class WebVideoDetail(WebVideoDetail):
@@ -59,6 +59,9 @@ class WebVideoDetail(WebVideoDetail):
         __returns.video_num = get_attr(plain, "video_num")
         return __returns
 
+    def __repr__(self) -> str:
+        return "<WebVideoDetail %s>" % self.title
+
 
 class WebVideoTag(WebVideoTag):
     """视频标签搜索结果模型
@@ -84,6 +87,9 @@ class WebVideoTag(WebVideoTag):
         __returns.url = get_attr(plain, "url")
         return __returns
 
+    def __repr__(self) -> str:
+        return "<WebVideoTag %s>" % self.text
+
 
 class WebVideo(WebVideo):
     """视频搜索结果模型
@@ -93,12 +99,14 @@ class WebVideo(WebVideo):
     Attributes:
         results (List[WebVideoDetail]): 搜索结果详情列表
         tags (List[WebVideoTag]): 搜索结果标签列表
+        url (str): 搜索结果链接
         plain (dict): 源搜索结果字典
     """
 
     def __init__(self) -> None:
         self.results = []
         self.tags = []
+        self.url = ""
         self.plain = {}
 
     @staticmethod
@@ -109,7 +117,11 @@ class WebVideo(WebVideo):
             __returns.results.append(WebVideoDetail._build_instance(i))
         for i in get_attr(plain, "tags"):
             __returns.tags.append(WebVideoTag._build_instance(i))
+        __returns.url = get_attr(plain, "url")
         return __returns
+
+    def __repr__(self) -> str:
+        return "<WebVideo %s>" % self.url[:20] + "..."
 
 
 class WebShortVideoDetail(WebShortVideoDetail):
@@ -137,8 +149,8 @@ class WebShortVideoDetail(WebShortVideoDetail):
         self.plain = {}
 
     @staticmethod
-    def _build_instance(plain: dict) -> WebShortVideo:
-        __returns = WebShortVideo()
+    def _build_instance(plain: dict) -> WebShortVideoDetail:
+        __returns = WebShortVideoDetail()
         __returns.plain = plain
         __returns.author = get_attr(plain, "author")
         __returns.author_avatar = get_attr(plain, "author_avatar")
@@ -147,6 +159,9 @@ class WebShortVideoDetail(WebShortVideoDetail):
         __returns.title = get_attr(plain, "title")
         __returns.url = get_attr(plain, "url")
         return __returns
+
+    def __repr__(self) -> str:
+        return "<WebShortVideoDetail %s>" % self.title
 
 
 class WebShortVideo(WebShortVideo):
@@ -157,12 +172,15 @@ class WebShortVideo(WebShortVideo):
     Attributes:
         results (List[WebShortVideoDetail]): 搜索结果详情列表
         total (int): 搜索结果总数
+        url (str): 搜索结果链接
         plain (dict): 源搜索结果字典
     """
 
     def __init__(self) -> None:
         self.results = []
         self.total = 0
+        self.url = ""
+        self.plain = {}
 
     @staticmethod
     def _build_instance(plain: dict) -> WebShortVideo:
@@ -172,13 +190,17 @@ class WebShortVideo(WebShortVideo):
             for i in get_attr(plain, "results"):
                 __returns.results.append(WebShortVideoDetail._build_instance(i))
         __returns.total = get_attr(plain, "total")
+        __returns.url = get_attr(plain, "url")
         return __returns
 
+    def __repr__(self) -> str:
+        return "<WebShortVideo %s>" % self.url[:20] + "..."
 
-class WebBaikeSection(WebBaikeSection):
-    """百科章节搜索结果模型
 
-    这是一个遵照BaiduSpider移动端网页搜索百科章节搜索结果结果模型创建的返回模型类。
+class WebSection(WebSection):
+    """章节搜索结果模型
+
+    这是一个遵照BaiduSpider移动端网页搜索章节搜索结果结果模型创建的返回模型类。
 
     Attributes:
         text (str): 搜索结果文字
@@ -192,12 +214,15 @@ class WebBaikeSection(WebBaikeSection):
         self.plain = {}
 
     @staticmethod
-    def _build_instance(plain: dict) -> WebBaikeSection:
-        __returns = WebBaikeSection()
+    def _build_instance(plain: dict) -> WebSection:
+        __returns = WebSection()
         __returns.plain = plain
         __returns.text = get_attr(plain, "text")
         __returns.url = get_attr(plain, "url")
         return __returns
+
+    def __repr__(self) -> str:
+        return "<WebSection %s>" % self.text
 
 
 class WebBaike(WebBaike):
@@ -210,7 +235,7 @@ class WebBaike(WebBaike):
         labels (List[str]): 搜索结果标签列表
         origin (str): 搜索结果来源
         poster (str): 搜索结果海报图片链接
-        sections (List[WebBaikeSection]): 搜索结果章节列表
+        sections (List[WebSection]): 搜索结果章节列表
         title (str): 搜索结果标题
         url (str): 搜索结果链接
         plain (dict): 源搜索结果字典
@@ -237,10 +262,13 @@ class WebBaike(WebBaike):
         __returns.poster = get_attr(plain, "poster")
         if get_attr(plain, "sections") is not None:
             for i in get_attr(plain, "sections"):
-                __returns.sections.append(WebBaikeSection._build_instance(i))
+                __returns.sections.append(WebSection._build_instance(i))
         __returns.title = get_attr(plain, "title")
         __returns.url = get_attr(plain, "url")
         return __returns
+
+    def __repr__(self) -> str:
+        return "<WebBaike %s>" % self.title
 
 
 class WebReyiDetail(WebReyiDetail):
@@ -290,6 +318,11 @@ class WebReyiDetail(WebReyiDetail):
         __returns.site = get_attr(plain, "site")
         return __returns
 
+    def __repr__(self) -> str:
+        return "<WebReyiDetail %s>" % (
+            self.des if len(self.des) <= 10 else self.des[:10] + "..."
+        )
+
 
 class WebReyi(WebReyi):
     """热议搜索结果模型
@@ -319,6 +352,9 @@ class WebReyi(WebReyi):
         __returns.total = get_attr(plain, "total")
         __returns.url = get_attr(plain, "url")
         return __returns
+
+    def __repr__(self) -> str:
+        return "<WebReyi %s>" % self.url[:20] + "..."
 
 
 class WebKnowledgeDetail(WebKnowledgeDetail):
@@ -351,6 +387,9 @@ class WebKnowledgeDetail(WebKnowledgeDetail):
         __returns.url = get_attr(plain, "url")
         return __returns
 
+    def __repr__(self) -> str:
+        return "<WebKnowledgeDetail %s>" % self.title
+
 
 class WebKnowledge(WebKnowledge):
     """相关知识搜索结果模型
@@ -377,6 +416,9 @@ class WebKnowledge(WebKnowledge):
         __returns.title = get_attr(plain, "title")
         return __returns
 
+    def __repr__(self) -> str:
+        return "<WebKnowledge %s>" % self.title
+
 
 class WebNormal(WebNormal):
     """普通搜索结果模型
@@ -396,6 +438,7 @@ class WebNormal(WebNormal):
         self.image = ""
         self.title = ""
         self.url = ""
+        self.sections = []
         self.plain = {}
 
     @staticmethod
@@ -406,7 +449,93 @@ class WebNormal(WebNormal):
         __returns.image = get_attr(plain, "image")
         __returns.title = get_attr(plain, "title")
         __returns.url = get_attr(plain, "url")
+        if get_attr(plain, "sections") is not None:
+            for i in get_attr(plain, "sections"):
+                __returns.sections.append(WebSection._build_instance(i))
         return __returns
+
+    def __repr__(self) -> str:
+        return "<WebNormal %s>" % self.title
+
+
+class WebVideoNormalInfo(WebVideoNormalInfo):
+    """普通视频信息搜索结果模型
+
+    这是一个遵照BaiduSpider移动端网页搜索普通视频信息搜索结果结果模型创建的返回模型类。
+
+    Attributes:
+        data (str): 搜索结果数据
+        type (str): 搜索结果类型
+        plain (dict): 源搜索结果字典
+    """
+
+    def __init__(self) -> None:
+        self.data = ""
+        self.type = ""
+        self.plain = {}
+
+    @staticmethod
+    def _build_instance(plain: dict) -> WebVideoNormalInfo:
+        __returns = WebVideoNormalInfo()
+        __returns.plain = plain
+        __returns.data = get_attr(plain, "data")
+        __returns.type = get_attr(plain, "type")
+        return __returns
+
+    def __repr__(self) -> str:
+        return "<WebVideoNormalInfo %s>" % self.type
+
+
+class WebVideoNormal(WebVideoNormal):
+    """普通视频搜索结果模型
+
+    这是一个遵照BaiduSpider移动端网页搜索普通视频搜索结果结果模型创建的返回模型类。
+
+    Attributes:
+        title (str): 搜索结果标题
+        url (str): 搜索结果链接
+        poster (str): 搜索结果海报链接
+        duration (time): 搜索结果时长
+        info (List[WebVideoNormalInfo]): 搜索结果信息列表
+        origin (str): 搜索结果来源（作者）
+        labels (List[str]): 搜索结果标签列表
+        video_num (int): 搜索结果视频数量
+        plain (dict): 源搜索结果字典
+    """
+
+    def __init__(self) -> None:
+        self.title = ""
+        self.url = ""
+        self.poster = ""
+        self.duration = None
+        self.info = []
+        self.origin = ""
+        self.labels = []
+        self.video_num = 0
+        self.plain = {}
+
+    @staticmethod
+    def _build_instance(plain: dict) -> WebVideoNormal:
+        __returns = WebVideoNormal()
+        __returns.plain = plain
+        __returns.poster = get_attr(plain, "poster")
+        __returns.title = get_attr(plain, "title")
+        __returns.url = get_attr(plain, "url")
+        __returns.duration = time(
+            minute=int(get_attr(plain, "duration").split(":")[0]),
+            second=int(get_attr(plain, "duration").split(":")[1]),
+        )
+        __returns.origin = get_attr(plain, "origin")
+        for i in get_attr(plain, "labels"):
+            __returns.info.append(i)
+        if get_attr(plain, "info") is not None:
+            for i in get_attr(plain, "info"):
+                __returns.info.append(WebVideoNormalInfo._build_instance(i))
+        __returns.video_num = get_attr(plain, "video_num")
+        return __returns
+
+    def __repr__(self) -> str:
+        return "<WebVideoNormal %s>" % self.title
 
 
 class WebResult(WebResult):
@@ -421,6 +550,8 @@ class WebResult(WebResult):
         reyi (Union[WebReyi, None]): 热议搜索结果
         knowledge (Union[WebKnowledge, None]): 相关知识搜索结果
         normal (List[WebNormal]): 普通搜索结果列表
+        video_normal (List[WebVideoNormal]): 普通视频搜索结果列表
+        query (str): 搜索词
         plain (dict): 源搜索结果字典
     """
 
@@ -431,12 +562,15 @@ class WebResult(WebResult):
         self.reyi = None
         self.knowledge = None
         self.normal = []
+        self.video_normal = []
+        self.query = ""
         self.plain = {}
 
     @staticmethod
-    def _build_instance(plain: list) -> WebResult:
+    def _build_instance(plain: list, query: str = "") -> WebResult:
         __returns = WebResult()
         __returns.plain = plain
+        __returns.query = query
         for p in plain:
             if get_attr(p, "type") == "result":
                 __returns.normal.append(WebNormal._build_instance(p))
@@ -450,7 +584,9 @@ class WebResult(WebResult):
                 __returns.knowledge = WebKnowledge._build_instance(p)
             elif get_attr(p, "type") == "baike":
                 __returns.baike = WebBaike._build_instance(get_attr(p, "result"))
+            elif get_attr(p, "type") == "video_normal":
+                __returns.video_normal.append(WebVideoNormal._build_instance(p))
         return __returns
 
     def __repr__(self) -> str:
-        return "<object WebResult>"
+        return "<WebResult %s>" % self.query

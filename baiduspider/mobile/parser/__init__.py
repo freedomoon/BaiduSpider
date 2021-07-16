@@ -92,7 +92,7 @@ class MobileParser(BaseSpider):
                 origin = __.find("div", class_="single-text")
                 if origin is not None:
                     origin = origin.text
-            _ = section.find("div", class_="c-img-wrapper")
+            _ = section.find("a").find("div", role="img")
             # 封面图片链接
             if _ is not None and _.find("img") is not None:
                 try:
@@ -116,8 +116,8 @@ class MobileParser(BaseSpider):
                     "des": des,
                     "origin": origin,
                     "img": img,
-                    "type": "result",
                     "sections": sections,
+                    "type": "result",
                 }
             )
         res_video_normal_container = soup.findAll(
@@ -177,6 +177,7 @@ class MobileParser(BaseSpider):
                     "origin": origin,
                     "labels": labels,
                     "video_num": video_num,
+                    "type": "video_normal",
                 }
             )
         # 预处理视频子块

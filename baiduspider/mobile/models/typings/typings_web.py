@@ -46,6 +46,7 @@ class WebVideo(object):
     def __init__(self) -> None:
         self.results: List[WebVideoDetail]
         self.tags: List[WebVideoTag]
+        self.url: str
         self.plain: dict
 
 
@@ -74,13 +75,14 @@ class WebShortVideo(object):
     def __init__(self) -> None:
         self.results: List[WebShortVideoDetail]
         self.total: int
+        self.url: str
         self.plain: dict
 
 
-class WebBaikeSection(object):
-    """网页搜索百科目录搜索结果模型类型注释类。
+class WebSection(object):
+    """网页搜索目录搜索结果模型类型注释类。
 
-    详见`baiduspider.mobile.models.web.WebBaikeSection`类。
+    详见`baiduspider.mobile.models.web.WebSection`类。
     """
 
     def __init__(self) -> None:
@@ -100,7 +102,7 @@ class WebBaike(object):
         self.labels: List[str]
         self.origin: str
         self.poster: str
-        self.sections: List[WebBaikeSection]
+        self.sections: List[WebSection]
         self.title: str
         self.url: str
         self.plain: dict
@@ -175,6 +177,37 @@ class WebNormal(object):
         self.image: str
         self.title: str
         self.url: str
+        self.sections: List[WebSection]
+        self.plain: dict
+
+
+class WebVideoNormalInfo(object):
+    """网页搜索普通视频信息搜索结果模型类型注释类。
+
+    详见`baiduspider.mobile.models.web.WebVideoNormaInfo`类。
+    """
+
+    def __init__(self) -> None:
+        self.data: str
+        self.type: str
+        self.plain: dict
+
+
+class WebVideoNormal(object):
+    """网页搜索普通视频搜索结果模型类型注释类。
+
+    详见`baiduspider.mobile.models.web.WebVideoNormal`类。
+    """
+
+    def __init__(self) -> None:
+        self.title: str
+        self.url: str
+        self.poster: str
+        self.duration: time
+        self.info: List[WebVideoNormalInfo]
+        self.origin: str
+        self.labels: List[str]
+        self.video_num: int
         self.plain: dict
 
 
@@ -191,4 +224,6 @@ class WebResult(object):
         self.reyi: Union[WebReyi, None]
         self.normal: List[WebNormal]
         self.knowledge: Union[WebKnowledge, None]
+        self.video_normal: List[WebVideoNormal]
+        self.query: str
         self.plain: dict

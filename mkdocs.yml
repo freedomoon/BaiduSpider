@@ -1,4 +1,5 @@
 site_name: BaiduSpider
+# site_url: http://127.0.0.1:8000/
 
 repo_url: https://github.com/BaiduSpider/BaiduSpider
 repo_name: BaiduSpider/BaiduSpider
@@ -30,7 +31,9 @@ nav:
   - 快速上手: index.md
   - 指南:
     - 简介: guide/index.md
-    - 网页搜索: guide/web.md
+    - PC端:
+      - 网页搜索: guide/pc/web.md
+      - 图片搜索: guide/pc/pic.md
   - API:
     - 简介: api/index.md
     - baiduspider:

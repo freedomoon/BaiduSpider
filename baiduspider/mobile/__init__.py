@@ -77,4 +77,4 @@ class BaiduMobileSpider(BaseSpider):
             error = err
         finally:
             self._handle_error(error, "BaiduSpider", "parse-web")
-        return WebResult._build_instance(results["results"])
+        return WebResult._build_instance(results["results"], query)

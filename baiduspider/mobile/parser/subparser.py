@@ -36,6 +36,7 @@ class WebSubParser(BaseSpider):
             .find("div", class_="c-tags-scroll-wrapper")
             .findAll("li")
         )
+        v_url = video["rl-link-href"]
         results = []
         tags = []
         for tag in tags_container:
@@ -89,7 +90,7 @@ class WebSubParser(BaseSpider):
                     "url": url,
                 }
             )
-        return {"results": results, "tags": tags}
+        return {"results": results, "tags": tags, "url": v_url}
 
     @handle_err
     def parse_short_video_block(self, short_video: BeautifulSoup) -> dict:
@@ -109,6 +110,7 @@ class WebSubParser(BaseSpider):
             .text.strip("条\ue734"),
             "全部",
         )
+        s_url = short_video.find("article")["rl-link-href"]
         short_video = short_video.find("section")
         short_video_container = short_video.findAll("div", class_="vid-pocket-item")
         results = []
@@ -147,7 +149,7 @@ class WebSubParser(BaseSpider):
                     "play_times": play_times,
                 }
             )
-        return {"results": results, "total": s_total}
+        return {"results": results, "total": s_total, "url": s_url}
 
     @handle_err
     def parse_baike_block(self, baike: BeautifulSoup) -> dict:

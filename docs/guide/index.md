@@ -1,11 +1,5 @@
 # 指南
 
-<!-- ::: baiduspider.BaiduSpider
-    handler: python
-    rendering:
-      show_root_heading: true
-      show_source: true -->
-
 这篇文档将简要介绍`指南`部分的作用。
 
 ## 这篇指南将会讲什么？
@@ -22,7 +16,7 @@
 
 ## 既然说BaiduSpider易用，为什么指南还这么长？
 
-BaiduSpider确实十分易用，但是，也有很多的进阶方法。指南里除了介绍普通方法外，也介绍了这些进阶参数和方法。况且，网页搜索的返回值占了整篇文档的大半……
+BaiduSpider确实十分易用，但是，也有很多的进阶方法。指南里除了介绍普通方法外，也介绍了这些进阶参数和方法。
 
 ## 我需要什么基础知识才能看懂这篇指南？
 
