@@ -93,6 +93,7 @@ class JingyanResult(JingyanResult):
     Attributes:
         results (List[JingyanNormal]): 普通搜索结果列表
         pages (int): 搜索结果页数
+        total (int): 搜索结果总数
         plain (list): 源搜索结果列表
     """
 
@@ -100,13 +101,15 @@ class JingyanResult(JingyanResult):
         super().__init__()
         self.results = []
         self.pages = 0
+        self.total = 0
         self.plain = []
 
     @staticmethod
-    def _build_instance(plain: list, pages: int) -> JingyanResult:
+    def _build_instance(plain: list, pages: int, total: int) -> JingyanResult:
         __returns = JingyanResult()
         __returns.plain = plain
         __returns.pages = pages
+        __returns.total = total
         for p in plain:
             __returns.results.append(JingyanNormal._build_instance(p))
         return __returns

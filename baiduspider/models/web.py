@@ -537,6 +537,7 @@ class WebResult(WebResult):
         gitee (WebGitee | None): 码云仓库搜索结果
         music (WebMusic | None): 音乐搜索结果
         pages (int): 搜索结果页数
+        total (int): 搜索结果总数
         plain (list): 源搜索结果列表
     """
 
@@ -555,12 +556,14 @@ class WebResult(WebResult):
         self.music = None
         self.pages = 0
         self.plain = []
+        self.total = 0
 
     @staticmethod
-    def _build_instance(plain: list, pages: int) -> WebResult:
+    def _build_instance(plain: list, pages: int, total: int) -> WebResult:
         __returns = WebResult()
         __returns.plain = plain
         __returns.pages = pages
+        __returns.total = total
         for p in plain:
             if get_attr(p, "type") == "result":
                 __returns.normal.append(WebNormal._build_instance(p))

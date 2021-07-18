@@ -33,3 +33,4 @@ class ZhidaoResult(object):
     def __init__(self) -> None:
         self.results: List[ZhidaoNormal]
         self.pages: int
+        self.total: int

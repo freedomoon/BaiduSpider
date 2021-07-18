@@ -241,3 +241,4 @@ class WebResult(object):
         self.music: WebMusic
         self.pages: int
         self.plain: list
+        self.total: int

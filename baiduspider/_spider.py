@@ -3,6 +3,7 @@ from typing import Union
 import requests
 import os
 from datetime import datetime, timedelta
+import math
 
 
 class BaseSpider(object):
@@ -56,12 +57,13 @@ class BaseSpider(object):
         """
         return html.replace("\u00a0", "")
 
-    def _get_response(self, url: str, proxies: dict = None) -> str:
+    def _get_response(self, url: str, proxies: dict = None, encoding: str = None) -> str:
         """获取网站响应，并返回源码
 
         Args:
             url (str): 要获取响应的链接
             proxies (dict): 代理相关设置
+            encoding (Union[str, None]): 目标网页编码
 
         Returns:
             str: 获取到的网站HTML代码
@@ -70,6 +72,9 @@ class BaseSpider(object):
             response = requests.get(url, headers=self.headers, proxies=proxies)
         else:
             response = requests.get(url, headers=self.headers)
+        if encoding is not None:
+            response.encoding = encoding
+            return response.text
         content = bytes(response.text, response.encoding).decode("utf-8")
         return content
 
@@ -132,6 +137,9 @@ class BaseSpider(object):
         elif "亿" in t:
             delta = 100000000
         return int(float(t.replace(r, "").replace("万", "").replace("亿", "")) * delta)
+    
+    def _calc_pages(self, tot: int, per: int) -> int:
+        return 1 if tot / per < 0 else math.ceil(tot / float(per))
 
     def __repr__(self) -> str:  # pragma: no cover
         return "<Spider %s>" % self.spider_name

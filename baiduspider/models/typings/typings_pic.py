@@ -27,3 +27,4 @@ class PicResult(object):
     def __init__(self) -> None:
         self.results: List[PicNormal]
         self.pages: int
+        self.total: int

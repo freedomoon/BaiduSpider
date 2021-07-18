@@ -31,3 +31,4 @@ class NewsResult(object):
     def __init__(self) -> None:
         self.results: List[NewsNormal]
         self.pages: int
+        self.total: int

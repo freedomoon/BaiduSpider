@@ -101,8 +101,9 @@ class Parser(BaseSpider):
         if "gitee" not in exclude and gitee:
             pre_results.append(dict(type="gitee", result=gitee))
         # 加载搜索结果总数
-        if num != 0:
-            pre_results.append(dict(type="total", result=num))
+        # 已经移动到根字典中
+        # if num != 0:
+        #     pre_results.append(dict(type="total", result=num))
         # 加载运算
         if "calc" not in exclude and calc:
             pre_results.append(
@@ -269,6 +270,7 @@ class Parser(BaseSpider):
             "results": result,
             # 最大页数
             "pages": max(pages),
+            "total": num
         }
 
     @handle_err
@@ -303,6 +305,8 @@ class Parser(BaseSpider):
         finally:
             if error:
                 raise ParseError(str(error))
+        soup = BeautifulSoup(content, "html.parser")
+        total = int(soup.find("div", id="resultInfo").text.split("约")[-1].split("张")[0].replace(",", ""))
         results = []
         for _ in data["data"][:-1]:
             if _:
@@ -327,6 +331,7 @@ class Parser(BaseSpider):
             "results": results,
             # 取最大页码
             "pages": max(pages),
+            "total": total
         }
 
     def parse_zhidao(self, content: str) -> dict:
@@ -339,6 +344,8 @@ class Parser(BaseSpider):
             dict: 解析后的结果
         """
         bs = BeautifulSoup(self._minify(content), "html.parser")
+        # 搜索结果总数
+        total = int(bs.find("div", class_="wgt-picker").find("span", class_="f-lighter").text.split("共", 1)[-1].split("条结果", 1)[0].replace(",", ""))
         # 所有搜索结果
         list_ = bs.find("div", class_="list").findAll("dl")
         results = []
@@ -416,13 +423,14 @@ class Parser(BaseSpider):
         wrap = bs.find("div", class_="pager")
         pages_ = wrap.findAll("a")[:-2]
         if "下一页" in pages_[-1].text:
-            total = pages_[-2].text
+            pages = pages_[-2].text
         else:
-            total = pages_[-1].text
+            pages = pages_[-1].text
         return {
             "results": results,
             # 取最大页码
-            "pages": int(total),
+            "pages": int(pages),
+            "total": total
         }
 
     def parse_video(self, content: str) -> dict:
@@ -500,6 +508,8 @@ class Parser(BaseSpider):
             dict: 解析后的结果
         """
         bs = BeautifulSoup(self._format(content), "html.parser")
+        # 搜索结果总数
+        total = int(bs.find("div", id="wrapper_wrapper").find("span", class_="nums").text.split("资讯", 1)[-1].split("篇", 1)[0].replace(",", ""))
         # 搜索结果容器
         data = (
             bs.find("div", id="content_left")
@@ -548,7 +558,7 @@ class Parser(BaseSpider):
             pages_ = pages_[1:]
         if "下一页 >" in pages_[-1].text:
             pages_ = pages_[:-1]
-        return {"results": results, "pages": int(pages_[-1].text)}
+        return {"results": results, "pages": int(pages_[-1].text), "total": total}
 
     def parse_wenku(self, content: str) -> dict:  # pragma: no cover
         """解析百度文库搜索的页面源代码，目前不可用。
@@ -648,6 +658,7 @@ class Parser(BaseSpider):
         # 最小化代码
         code = self._minify(content)
         bs = BeautifulSoup(code, "html.parser")
+        total = int(bs.find("div", class_="result-num").text.split("约", 1)[-1].split("个", 1)[0].replace(",", ""))
         # 加载搜索结果
         data = bs.find("div", class_="search-list").findAll("dl")
         results = []
@@ -712,8 +723,8 @@ class Parser(BaseSpider):
             return {"results": results, "pages": 1}
         if "下一页" in pages_[-1].text:
             pages_ = pages_[:-1]
-        total = int(self._format(pages_[-1].text))
-        return {"results": results, "pages": total}
+        pages = int(self._format(pages_[-1].text))
+        return {"results": results, "pages": pages, "total": total}
 
     def parse_baike(self, content: str) -> dict:
         """解析百度百科搜索的页面源代码.

@@ -10,7 +10,7 @@
 
 BaiduSpider是一个使用Python编写的轻量级百度爬虫。它使用轻量的[requests](https://docs.python-requests.org/zh_CN/latest/)和[BeautifulSoup](https://www.crummy.com/software/BeautifulSoup/)搭建，并提供了易用的API接口以及完善的类型注释`typing`，提高开发速度。
 
-<div style="width:100%;height:0px;position:relative;padding-bottom:56.327%;"><iframe src="https://streamja.com/embed/akZvJ" frameborder="0" width="100%" height="100%" allowfullscreen style="width:100%;height:100%;position:absolute;"></iframe></div>
+<div style="width:100%;height:0px;position:relative;padding-bottom:56.327%;"><iframe src="https://streamja.com/embed/rd9kO" frameborder="0" width="100%" height="100%" allowfullscreen style="width:100%;height:100%;position:absolute;"></iframe></div>
 
 有了BaiduSpider，你可以：
 

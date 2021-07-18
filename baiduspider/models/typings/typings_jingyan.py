@@ -45,3 +45,4 @@ class JingyanResult(object):
     def __init__(self) -> None:
         self.results: List[JingyanNormal]
         self.pages: int
+        self.total: int

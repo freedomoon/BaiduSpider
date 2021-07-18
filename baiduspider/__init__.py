@@ -122,6 +122,13 @@ class BaiduSpider(BaseSpider):
         }
         self.parser = Parser()
         self.EMPTY = {"results": [], "pages": 0}
+        self.RESULTS_PER_PAGE = {
+            "web": 10,
+            "pic": 20,
+            "zhidao": 10,
+            "news": 10,
+            "jingyan": 10,
+        }
 
     def search_web(
         self,
@@ -399,9 +406,9 @@ class BaiduSpider(BaseSpider):
             error = err
         finally:
             self._handle_error(error, "BaiduSpider", "parse-web")
-        # return {"results": results["results"], "pages": results["pages"]}
+        pages = self._calc_pages(results["total"], self.RESULTS_PER_PAGE["web"])
         return WebResult._build_instance(
-            plain=results["results"], pages=results["pages"]
+            plain=results["results"], pages=pages, total = results["total"]
         )
 
     def search_pic(self, query: str, pn: int = 1, proxies: dict = None) -> PicResult:
@@ -465,8 +472,8 @@ class BaiduSpider(BaseSpider):
             error = err
         finally:
             self._handle_error(error)
-        # return {"results": result["results"], "pages": result["pages"]}
-        return PicResult._build_instance(plain=result["results"], pages=result["pages"])
+        pages = self._calc_pages(result["total"], self.RESULTS_PER_PAGE["pic"])
+        return PicResult._build_instance(plain=result["results"], pages=pages, total=result["total"])
 
     def search_zhidao(
         self,
@@ -547,10 +554,10 @@ class BaiduSpider(BaseSpider):
                 "https://zhidao.baidu.com/search?lm=0&rn=10&fr=search&pn=%d&word=%s&date=%d"
                 % ((pn - 1) * 10, quote(query), time)
             )
-            source = self._get_response(url, proxies)
+            code = self._get_response(url, proxies, "gb2312")
             # 转化编码
-            source.encoding = "gb2312"
-            code = source.text
+            # source.encoding = "gb2312"
+            # code = source.text
             result = self.parser.parse_zhidao(code)
             result = result if result is not None else self.EMPTY
         except Exception as err:
@@ -558,7 +565,8 @@ class BaiduSpider(BaseSpider):
         finally:
             if error:
                 self._handle_error(error)
-        return ZhidaoResult._build_instance(result["results"], result["pages"])
+        pages = self._calc_pages(result["total"], self.RESULTS_PER_PAGE["zhidao"])
+        return ZhidaoResult._build_instance(result["results"], pages, result["total"])
 
     def search_video(
         self, query: str, pn: int = 1, proxies: dict = None
@@ -617,8 +625,7 @@ class BaiduSpider(BaseSpider):
                 % (quote(query), (pn - 1) * 10)
             )
             # 获取源码
-            source = self._get_response(url, proxies)
-            code = self._minify(source.text)
+            code = self._get_response(url, proxies)
             result = self.parser.parse_video(code)
             result = result if result is not None else self.EMPTY
         except Exception as err:
@@ -626,7 +633,6 @@ class BaiduSpider(BaseSpider):
         finally:
             if error:
                 self._handle_error(error)
-        # return {"results": result["results"]}
         return VideoResult._build_instance(result["results"])
 
     def search_news(
@@ -719,9 +725,7 @@ class BaiduSpider(BaseSpider):
                 % (quote(query), (pn - 1) * 10, sort_by, show)
             )
             # 源码
-            source = self._get_response(url, proxies)
-            # 压缩
-            code = self._minify(source.text)
+            code = self._get_response(url, proxies)
             result = self.parser.parse_news(code)
             result = result if result is not None else self.EMPTY
         except Exception as err:
@@ -729,7 +733,8 @@ class BaiduSpider(BaseSpider):
         finally:
             if error:
                 self._handle_error(error)
-        return NewsResult._build_instance(result["results"], result["pages"])
+        pages = self._calc_pages(result["total"], self.RESULTS_PER_PAGE["news"])
+        return NewsResult._build_instance(result["results"], pages, result["total"])
 
     def search_wenku(
         self,
@@ -743,6 +748,8 @@ class BaiduSpider(BaseSpider):
         proxies: dict = None,
     ) -> WenkuResult:
         """百度文库搜索。
+
+        由于百度界面改版，目前暂时无法使用百度文库搜索。以下为旧版本使用说明。
 
         请注意，目前百度文库搜索若报错，则可能需要先手动打开百度文库搜索
         （`https://wenku.baidu.com/search?word=placeholder&lm=0&od=0&fr=top_home&ie=utf-8`）
@@ -894,9 +901,7 @@ class BaiduSpider(BaseSpider):
                 url += "&pb=%d&pe=%d" % (page_range[0], page_range[1])
             else:
                 url += "&pg=0"
-            source = self._get_response(url, proxies)
-            source.encoding = "gb2312"
-            code = self._minify(source.text)
+            code = self._get_response(url, proxies, "gb2312")
             result = self.parser.parse_wenku(code)
             result = result if result is not None else self.EMPTY
         except Exception as err:
@@ -985,8 +990,7 @@ class BaiduSpider(BaseSpider):
                 (pn - 1) * 10,
                 scope,
             )
-            source = self._get_response(url, proxies)
-            code = self._minify(source.text)
+            code = self._get_response(url, proxies)
             result = self.parser.parse_jingyan(code)
             result = result if result is not None else self.EMPTY
         except Exception as err:
@@ -994,7 +998,8 @@ class BaiduSpider(BaseSpider):
         finally:
             if error:
                 self._handle_error(error)
-        return JingyanResult._build_instance(result["results"], result["pages"])
+        pages = self._calc_pages(result["total"], self.RESULTS_PER_PAGE["jingyan"])
+        return JingyanResult._build_instance(result["results"], pages, result["total"])
 
     def search_baike(self, query: str, proxies: dict = None) -> BaikeResult:
         """百度百科搜索。
@@ -1041,8 +1046,7 @@ class BaiduSpider(BaseSpider):
         result = self.EMPTY
         try:
             url = "https://baike.baidu.com/search?word=%s" % quote(query)
-            source = self._get_response(url, proxies)
-            code = self._minify(source.text)
+            code = self._get_response(url, proxies)
             result = self.parser.parse_baike(code)
             result = result if result is not None else self.EMPTY
         except Exception as err:
