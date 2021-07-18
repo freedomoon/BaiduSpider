@@ -1,9 +1,10 @@
-"""BaiduSpider，爬取百度的利器.
+"""BaiduSpider，一个爬取百度的利器.
 
 :Author: Sam Zhang
+
 :Licence: GPL_V3
-:GitHub: https://github.com/samzhangjy
-:GitLab: https://gitlab.com/samzhangjy
+
+:GitHub: https://github.com/BaiduSpider/BaiduSpider
 """
 import datetime
 import time as time_lib
@@ -42,21 +43,71 @@ class BaiduSpider(BaseSpider):
 
         目前支持百度搜索，百度图片，百度知道，百度视频，百度资讯，百度文库，百度经验和百度百科，并且返回的搜索结果无广告。继承自``BaseSpider``。
 
-        BaiduSpider.`search_web(self: BaiduSpider, query: str, pn: int = 1) -> dict`: 百度网页搜索
+        - BaiduSpider.`#!python search_web(
+            self: BaiduSpider, 
+            query: str, 
+            pn: int = 1, 
+            exclude: list = [], 
+            time: Union[tuple, str, None] = None, 
+            proxies: dict = None
+        ) -> WebResult`: 百度网页搜索
 
-        BaiduSpider.`search_pic(self: BaiduSpider, query: str, pn: int = 1) -> dict`: 百度图片搜索
+        - BaiduSpider.`#!python search_pic(
+            self: BaiduSpider, 
+            query: str, 
+            pn: int = 1, 
+            proxies: dict = None
+        ) -> PicResult`: 百度图片搜索
 
-        BaiduSpider.`search_zhidao(self: BaiduSpider, query: str, pn: int = 1) -> dict`: 百度知道搜索
+        - BaiduSpider.`#!python search_zhidao(
+            self: BaiduSpider, 
+            query: str, 
+            pn: int = 1, 
+            time: Union[str, None] = None, 
+            proxies: dict = None
+        ) -> ZhidaoResult`: 百度知道搜索
 
-        BaiduSpider.`search_video(self: BaiduSpider, query: str, pn: int = 1) -> dict`: 百度视频搜索
+        - BaiduSpider.`#!python search_video(
+            self: BaiduSpider, 
+            query: str, 
+            pn: int = 1, 
+            proxies: dict = None
+        ) -> VideoResult`: 百度视频搜索
 
-        BaiduSpider.`search_news(self: BaiduSpider, query: str, pn: int = 1) -> dict`: 百度资讯搜索
+        - BaiduSpider.`#!python search_news(
+            self: BaiduSpider, 
+            query: str, 
+            pn: int = 1, 
+            sort_by: str = "focus", 
+            show: str = "all", 
+            proxies: dict = None
+        ) -> NewsResult`: 百度资讯搜索
 
-        BaiduSpider.`search_wenku(self: BaiduSpider, query: str, pn: int = 1) -> dict`: 百度文库搜索
+        - BaiduSpider.`#!python search_wenku(
+            self: BaiduSpider, 
+            query: str, 
+            pn: int = 1, 
+            scope: str = "all", 
+            format: str = "all", 
+            time: str = "all", 
+            page_range: Union[Tuple[int], str] = "all", 
+            sort_by: str = "relation", 
+            proxies: dict = None
+        ) -> WenkuResult`: 百度文库搜索
 
-        BaiduSpider.`search_jingyan(self: BaiduSpider, query: str, pn: int = 1) -> dict`: 百度经验搜索
+        - BaiduSpider.`#!python search_jingyan(
+            self: BaiduSpider, 
+            query: str, 
+            pn: int = 1, 
+            scope: str = "all", 
+            proxies: dict = None
+        ) -> JingyanResult`: 百度经验搜索
 
-        BaiduSpider.`search_baike(self: BaiduSpider, query: str) -> dict`: 百度百科搜索
+        - BaiduSpider.`#!python search_baike(
+            self: BaiduSpider, 
+            query: str, 
+            proxies: dict = None
+        )`: 百度百科搜索
         """
         super().__init__()
         # 爬虫名称（不是请求的，只是用来表识）
@@ -78,6 +129,7 @@ class BaiduSpider(BaseSpider):
         pn: int = 1,
         exclude: list = [],
         time: Union[tuple, str, None] = None,
+        proxies: dict = None,
     ) -> WebResult:
         """百度网页搜索。
 
@@ -277,11 +329,21 @@ class BaiduSpider(BaseSpider):
             一周内、一月内、一年内。当`time`为`None`时，BaiduSpider将展示全部结果，忽略筛选。
             如果参数非法，BaiduSpider会忽略此次筛选。
 
+        - 设置代理：
+            ```python
+            BaiduSpider().search_web('搜索词', proxies={
+                "http": "http://xxx.xxx.xxx:xxxx",  # HTTP代理
+                "https": "https://xxx.xxx.xxx:xxxx"  # HTTPS代理
+            })
+            ```
+            详细配置请参考[requests文档](https://docs.python-requests.org/zh_CN/latest/user/advanced.html?highlight=proxies#proxies)。
+
         Args:
             query (str): 要爬取的搜索词.
             pn (int, optional): 爬取的页码. Defaults to 1.
             exclude (list, optional): 要屏蔽的控件. Defaults to [].
             time (Union[tuple, str, None]): 按时间筛选参数. Defaults to None.
+            proxies (Union[dict, None]): 代理配置. Defaults to None.
 
         Returns:
             WebResult: 爬取的返回值和搜索结果
@@ -331,7 +393,7 @@ class BaiduSpider(BaseSpider):
             url = "https://www.baidu.com/s?wd=%s&pn=%d" % (text, (pn - 1) * 10)
             if to is not None and from_ is not None:
                 url += "&gpc=" + quote(f"stf={from_},{to}|stftype=2")
-            content = self._get_response(url)
+            content = self._get_response(url, proxies)
             results = self.parser.parse_web(content, exclude=exclude)
         except Exception as err:
             error = err
@@ -342,7 +404,7 @@ class BaiduSpider(BaseSpider):
             plain=results["results"], pages=results["pages"]
         )
 
-    def search_pic(self, query: str, pn: int = 1) -> PicResult:
+    def search_pic(self, query: str, pn: int = 1, proxies: dict = None) -> PicResult:
         """百度图片搜索。
 
         - 实例：
@@ -372,9 +434,19 @@ class BaiduSpider(BaseSpider):
             BaiduSpider().search_pic('搜索词', pn=2)
             ```
 
+        - 设置代理：
+            ```python
+            BaiduSpider().search_pic('搜索词', proxies={
+                "http": "http://xxx.xxx.xxx:xxxx",  # HTTP代理
+                "https": "https://xxx.xxx.xxx:xxxx"  # HTTPS代理
+            })
+            ```
+            详细配置请参考[requests文档](https://docs.python-requests.org/zh_CN/latest/user/advanced.html?highlight=proxies#proxies)。
+
         Args:
             query (str): 要爬取的query
             pn (int, optional): 爬取的页码. Defaults to 1.
+            proxies (Union[dict, None]): 代理配置. Defaults to None.
 
         Returns:
             PicResult: 爬取的搜索结果
@@ -386,7 +458,7 @@ class BaiduSpider(BaseSpider):
                 quote(query),
                 (pn - 1) * 20,
             )
-            content = self._get_response(url)
+            content = self._get_response(url, proxies)
             result = self.parser.parse_pic(content)
             result = result if result is not None else self.EMPTY
         except Exception as err:
@@ -397,7 +469,11 @@ class BaiduSpider(BaseSpider):
         return PicResult._build_instance(plain=result["results"], pages=result["pages"])
 
     def search_zhidao(
-        self, query: str, pn: int = 1, time: Union[str, None] = None
+        self,
+        query: str,
+        pn: int = 1,
+        time: Union[str, None] = None,
+        proxies: dict = None,
     ) -> ZhidaoResult:
         """百度知道搜索。
 
@@ -441,10 +517,20 @@ class BaiduSpider(BaseSpider):
             一年内。当`time`为`None`时，BaiduSpider将展示全部结果，忽略筛选。
             如果参数非法，BaiduSpider会忽略此次筛选。
 
+        - 设置代理：
+            ```python
+            BaiduSpider().search_zhidao('搜索词', proxies={
+                "http": "http://xxx.xxx.xxx:xxxx",  # HTTP代理
+                "https": "https://xxx.xxx.xxx:xxxx"  # HTTPS代理
+            })
+            ```
+            详细配置请参考[requests文档](https://docs.python-requests.org/zh_CN/latest/user/advanced.html?highlight=proxies#proxies)。
+
         Args:
             query (str): 要搜索的query
             pn (int, optional): 搜索结果的页码. Defaults to 1.
             time (Union[str, None], optional): 时间筛选参数. Defaults to None.
+            proxies (Union[dict, None]): 代理配置. Defaults to None.
 
         Returns:
             dict: 搜索结果以及总页码
@@ -461,7 +547,7 @@ class BaiduSpider(BaseSpider):
                 "https://zhidao.baidu.com/search?lm=0&rn=10&fr=search&pn=%d&word=%s&date=%d"
                 % ((pn - 1) * 10, quote(query), time)
             )
-            source = requests.get(url, headers=self.headers)
+            source = self._get_response(url, proxies)
             # 转化编码
             source.encoding = "gb2312"
             code = source.text
@@ -474,7 +560,9 @@ class BaiduSpider(BaseSpider):
                 self._handle_error(error)
         return ZhidaoResult._build_instance(result["results"], result["pages"])
 
-    def search_video(self, query: str, pn: int = 1) -> VideoResult:
+    def search_video(
+        self, query: str, pn: int = 1, proxies: dict = None
+    ) -> VideoResult:
         """百度视频搜索。
 
         - 普通搜索：
@@ -504,9 +592,19 @@ class BaiduSpider(BaseSpider):
             BaiduSpider().search_video('搜索词', pn=2)
             ```
 
+        - 设置代理：
+            ```python
+            BaiduSpider().search_video('搜索词', proxies={
+                "http": "http://xxx.xxx.xxx:xxxx",  # HTTP代理
+                "https": "https://xxx.xxx.xxx:xxxx"  # HTTPS代理
+            })
+            ```
+            详细配置请参考[requests文档](https://docs.python-requests.org/zh_CN/latest/user/advanced.html?highlight=proxies#proxies)。
+
         Args:
             query (str): 要搜索的query
             pn (int, optional): 搜索结果的页码. Defaults to 1.
+            proxies (Union[dict, None]): 代理配置. Defaults to None.
 
         Returns:
             VideoResult: 爬取的搜索结果
@@ -519,7 +617,7 @@ class BaiduSpider(BaseSpider):
                 % (quote(query), (pn - 1) * 10)
             )
             # 获取源码
-            source = requests.get(url, headers=self.headers)
+            source = self._get_response(url, proxies)
             code = self._minify(source.text)
             result = self.parser.parse_video(code)
             result = result if result is not None else self.EMPTY
@@ -532,7 +630,12 @@ class BaiduSpider(BaseSpider):
         return VideoResult._build_instance(result["results"])
 
     def search_news(
-        self, query: str, pn: int = 1, sort_by: str = "focus", show: str = "all"
+        self,
+        query: str,
+        pn: int = 1,
+        sort_by: str = "focus",
+        show: str = "all",
+        proxies: dict = None,
     ) -> NewsResult:
         """百度资讯搜索。
 
@@ -579,11 +682,21 @@ class BaiduSpider(BaseSpider):
             BaiduSpider().search_news('搜索词', show='media')  # 仅显示来自媒体的新闻结果
             ```
 
+        - 设置代理：
+            ```python
+            BaiduSpider().search_news('搜索词', proxies={
+                "http": "http://xxx.xxx.xxx:xxxx",  # HTTP代理
+                "https": "https://xxx.xxx.xxx:xxxx"  # HTTPS代理
+            })
+            ```
+            详细配置请参考[requests文档](https://docs.python-requests.org/zh_CN/latest/user/advanced.html?highlight=proxies#proxies)。
+
         Args:
             query (str): 搜索query
             pn (int, optional): 搜索结果的页码. Defaults to 1.
             sort_by (str, optional): 搜索结果排序方式. Defaults to "focus".
             show (str, optional): 搜索结果筛选方式. Defaults to "all".
+            proxies (Union[dict, None]): 代理配置. Defaults to None.
 
         Returns:
             NewsResult: 爬取的搜索结果与总页码。
@@ -606,7 +719,7 @@ class BaiduSpider(BaseSpider):
                 % (quote(query), (pn - 1) * 10, sort_by, show)
             )
             # 源码
-            source = requests.get(url, headers=self.headers)
+            source = self._get_response(url, proxies)
             # 压缩
             code = self._minify(source.text)
             result = self.parser.parse_news(code)
@@ -627,6 +740,7 @@ class BaiduSpider(BaseSpider):
         time: str = "all",
         page_range: Union[Tuple[int], str] = "all",
         sort_by: str = "relation",
+        proxies: dict = None,
     ) -> WenkuResult:
         """百度文库搜索。
 
@@ -713,6 +827,15 @@ class BaiduSpider(BaseSpider):
             ```
             若`sort_by`参数非法，BaiduSpider将忽略此次筛选。
 
+        - 设置代理：
+            ```python
+            BaiduSpider().search_wenku('搜索词', proxies={
+                "http": "http://xxx.xxx.xxx:xxxx",  # HTTP代理
+                "https": "https://xxx.xxx.xxx:xxxx"  # HTTPS代理
+            })
+            ```
+            详细配置请参考[requests文档](https://docs.python-requests.org/zh_CN/latest/user/advanced.html?highlight=proxies#proxies)。
+
         Args:
             query (str): 要搜索的query
             pn (int, optional): 搜索的页码. Defaults to 1.
@@ -721,6 +844,7 @@ class BaiduSpider(BaseSpider):
             time (str, optional): 按时间筛选. Defaults to "all".
             page_range (Union[str, Tuple[int]]): 按页数筛选. Defaults to "all".
             sort_by (str): 排序方式. Defaults to "relation".
+            proxies (Union[dict, None]): 代理配置. Defaults to None.
 
         Returns:
             WenkuResult: 搜索结果和总计页数
@@ -770,7 +894,7 @@ class BaiduSpider(BaseSpider):
                 url += "&pb=%d&pe=%d" % (page_range[0], page_range[1])
             else:
                 url += "&pg=0"
-            source = requests.get(url, headers=self.headers)
+            source = self._get_response(url, proxies)
             source.encoding = "gb2312"
             code = self._minify(source.text)
             result = self.parser.parse_wenku(code)
@@ -783,7 +907,7 @@ class BaiduSpider(BaseSpider):
         return WenkuResult._build_instance(result["results"], result["pages"])
 
     def search_jingyan(
-        self, query: str, pn: int = 1, scope: str = "all"
+        self, query: str, pn: int = 1, scope: str = "all", proxies: dict = None
     ) -> JingyanResult:
         """百度经验搜索。
 
@@ -830,10 +954,20 @@ class BaiduSpider(BaseSpider):
             BaiduSpider().search_jingyan('搜索词', scope="outstanding")  # 仅显示优秀经验
             ```
 
+        - 设置代理：
+            ```python
+            BaiduSpider().search_jingyan('搜索词', proxies={
+                "http": "http://xxx.xxx.xxx:xxxx",  # HTTP代理
+                "https": "https://xxx.xxx.xxx:xxxx"  # HTTPS代理
+            })
+            ```
+            详细配置请参考[requests文档](https://docs.python-requests.org/zh_CN/latest/user/advanced.html?highlight=proxies#proxies)。
+
         Args:
             query (str): 要搜索的关键词
             pn (int, optional): 搜索结果的页码. Defaults to 1.
             scope (str, optional): 筛选范围. Defaults to "all".
+            proxies (Union[dict, None]): 代理配置. Defaults to None.
 
         Returns:
             JingyanResult: 搜索结果以及总计的页码.
@@ -851,7 +985,7 @@ class BaiduSpider(BaseSpider):
                 (pn - 1) * 10,
                 scope,
             )
-            source = requests.get(url, headers=self.headers)
+            source = self._get_response(url, proxies)
             code = self._minify(source.text)
             result = self.parser.parse_jingyan(code)
             result = result if result is not None else self.EMPTY
@@ -862,7 +996,7 @@ class BaiduSpider(BaseSpider):
                 self._handle_error(error)
         return JingyanResult._build_instance(result["results"], result["pages"])
 
-    def search_baike(self, query: str) -> BaikeResult:
+    def search_baike(self, query: str, proxies: dict = None) -> BaikeResult:
         """百度百科搜索。
 
         - 使用方法：
@@ -887,8 +1021,18 @@ class BaiduSpider(BaseSpider):
             }
             ```
 
+        - 设置代理：
+            ```python
+            BaiduSpider().search_baike('搜索词', proxies={
+                "http": "http://xxx.xxx.xxx:xxxx",  # HTTP代理
+                "https": "https://xxx.xxx.xxx:xxxx"  # HTTPS代理
+            })
+            ```
+            详细配置请参考[requests文档](https://docs.python-requests.org/zh_CN/latest/user/advanced.html?highlight=proxies#proxies)。
+
         Args:
-            query (str): 要搜索的关键词
+            query (str): 要搜索的关键词.
+            proxies (Union[dict, None]): 代理配置. Defaults to None.
 
         Returns:
             dict: 搜索结果和总页数
@@ -897,7 +1041,7 @@ class BaiduSpider(BaseSpider):
         result = self.EMPTY
         try:
             url = "https://baike.baidu.com/search?word=%s" % quote(query)
-            source = requests.get(url, headers=self.headers)
+            source = self._get_response(url, proxies)
             code = self._minify(source.text)
             result = self.parser.parse_baike(code)
             result = result if result is not None else self.EMPTY

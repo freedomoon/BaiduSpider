@@ -56,16 +56,20 @@ class BaseSpider(object):
         """
         return html.replace("\u00a0", "")
 
-    def _get_response(self, url: str) -> str:
+    def _get_response(self, url: str, proxies: dict = None) -> str:
         """获取网站响应，并返回源码
 
         Args:
             url (str): 要获取响应的链接
+            proxies (dict): 代理相关设置
 
         Returns:
             str: 获取到的网站HTML代码
         """
-        response = requests.get(url, headers=self.headers)
+        if proxies is not None:
+            response = requests.get(url, headers=self.headers, proxies=proxies)
+        else:
+            response = requests.get(url, headers=self.headers)
         content = bytes(response.text, response.encoding).decode("utf-8")
         return content
 
