@@ -5,7 +5,11 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setuptools.setup(
     name="BaiduSpider",
+<<<<<<< HEAD
     version="0.1.13",
+=======
+    version="0.1.6",
+>>>>>>> parent of 6696c2e2 (:package: 更新PyPI包)
     author="Sam Zhang",
     author_email="samzhang951@outlook.com",
     description="BaiduSpider，一个爬取百度的利器",
